@@ -1,0 +1,52 @@
+html, body, div {
+	padding: 0;
+	margin: 0;
+}
+
+#mainContainer {
+	width: 100hh;
+	height: 100vh;
+	background-color: black;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#gameFrame {
+	position: relative;
+	overflow: hidden;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#spacecraft {
+	height: 50px;
+	width: 50px;
+	background-color: red;
+	position: absolute;
+	left: 800px ;
+	top: 500px;
+}
+
+
+.rocket {
+	height: 4px;
+	width: 15px;
+	background-color: green;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	z-index: 2
+}
+
+
+
+
+
+
+
+
+
+
+

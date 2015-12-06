@@ -1,156 +1,281 @@
 /**
  * [SpaceCraft description]
  */
-var SpaceCraft = function() {
+var SpaceCraft = function(htmlElement) {
 
     var initialPos = {
         top: 500,
         left: 800
     };
 
-    this.shootRocket = shootRocket;
+    var lives = 5;
 
-    this.moveRight = moveRight;
-    this.moveLeft = moveLeft;
-    this.moveUp = moveUp;
-    this.moveDown = moveDown;
+    this.htmlElement = htmlElement;
+    this.isMoving = false;
+    this.isFiring = false;
+    this.weapons = {
+        rockets: [],
+         miniguns: []
+    };
 
-    this.getPosition = getPosition;
-    this.getHTMLElement = getHTMLElement;
+
+    /**
+     * [moveRight description]
+     * @return {[type]} [description]
+     */
+    this.moveRight = function() { 
+        if (!this.isMoving) {
+            
+            this.isMoving = true;
+            var that = this;
+
+            intervalID = setInterval(function() {
+                var currentPos = getPosition(that.htmlElement);
+                that.htmlElement.style.left =  (currentPos[0][0] + 10) + "px";
+            }, 60);
+        }
+    };
+
+    /**
+     * [moveLeft description]
+     * @return {[type]} [description]
+     */
+    this.moveLeft = function() { 
+        if (!this.isMoving) {
+            
+            this.isMoving = true;
+            var that = this;
+
+            intervalID = setInterval(function() {
+                var currentPos = getPosition(that.htmlElement);
+                that.htmlElement.style.left =  (currentPos[0][0] - 10) + "px";
+            }, 60);
+        }
+    };
+
+    /**
+     * [moveUp description]
+     * @return {[type]} [description]
+     */
+    this.moveUp = function() { 
+        if (!this.isMoving) {
+            
+            this.isMoving = true;
+            var that = this;
+
+            intervalID = setInterval(function() {
+                var currentPos = getPosition(that.htmlElement);
+                that.htmlElement.style.top =  (currentPos[1][0] - 10) + "px";
+            }, 60);
+        }
+    };
+
+    /**
+     * [moveDown description]
+     * @return {[type]} [description]
+     */
+    this.moveDown = function() { 
+        if (!this.isMoving) {
+            
+            this.isMoving = true;
+            var that = this;
+
+            intervalID = setInterval(function() {
+                var currentPos = getPosition(that.htmlElement);
+                that.htmlElement.style.top =  (currentPos[1][0] + 10) + "px";
+            }, 60);
+        }
+    };
+ 
+
+    /**
+     * [getInitialPos description]
+     * @return {[type]} [description]
+     */
     this.getInitialPos = function() {
         return initialPos;
     };
 
-    this.isMoving = false;
-};
+    
+
+    /**
+     * [shootRocket description]
+     * @return {[type]} [description]
+     */
+    this.shootRocket = function() {
+
+        if (this.weapons.rockets.length > 0) {
+            this.weapons.rockets[this.weapons.rockets.length - 1].fire();
+            this.weapons.rockets.pop();
+            window.document.getElementById("hud_rockets").innerHTML = this.weapons.rockets.length;
+            if (this.weapons.rockets.length == 0) {
+                window.document.getElementById("hud_rocketsIcon").className = "hud_dead";
+                window.document.getElementById("hud_rockets").className = "hud_dead";
+            }
+        } else {
+            alert("no more !");
+        }
+    };
 
 
-/**
- * [moveRight description]
- * @return {[type]} [description]
- */
-var moveRight = function() { 
-    if (!this.isMoving) {
+
+    /**
+     * [fireMiniguns description]
+     * @return {[type]} [description]
+     */
+    this.fireMiniguns = function() {
+        if (!this.isFiring) {
+            this.isFiring = true;
+            var that = this;
+
+            intervalFireID = setInterval(function() {
+                for(var i = 0; i < that.weapons.miniguns.length; i++) {
+                    that.weapons.miniguns[i].fire();
+                }
+            }, 100);
+        }
+    };
+
+
+    /**
+     * [getLives description]
+     * @return {[type]} [description]
+     */
+    this.getLives = function() {
+        return lives;
+    };
+
+
+    /**
+     * [setLives description]
+     * @param {[type]} modifier [description]
+     */
+    this.setLives = function(modifier) {
+        lives += modifier;
+
+        window.document.getElementById("hud_lives").innerHTML = lives;
         
-        this.isMoving = true;
-        var that = this;
-
-        intervalID = setInterval(function() {
-            var currentPos = that.getPosition();
-            var htmlElement = that.getHTMLElement();
-            htmlElement.style.left =  (currentPos.left + 10) + "px";
-        }, 60);
-    }
-};
-
-
-/**
- * [moveLeft description]
- * @return {[type]} [description]
- */
-var moveLeft = function() { 
-     if (!this.isMoving) {
-        
-        this.isMoving = true;
-        var that = this;
-
-        intervalID = setInterval(function() {
-            var currentPos = that.getPosition();
-            var htmlElement = that.getHTMLElement();
-            htmlElement.style.left =  (currentPos.left - 10) + "px";
-        }, 60);
-    }
-};
-
-
-/**
- * [moveUp description]
- * @return {[type]} [description]
- */
-var moveUp = function() { 
-     if (!this.isMoving) {
-        
-        this.isMoving = true;
-        var that = this;
-
-        intervalID = setInterval(function() {
-            var currentPos = that.getPosition();
-            var htmlElement = that.getHTMLElement();
-            htmlElement.style.top =  (currentPos.top - 10) + "px";
-        }, 60);
-    }
-};
-
-
-/**
- * [moveDown description]
- * @return {[type]} [description]
- */
-var moveDown = function() { 
-    if (!this.isMoving) {
-        
-        this.isMoving = true;
-        var that = this;
-
-        intervalID = setInterval(function() {
-            var currentPos = that.getPosition();
-
-            var htmlElement = that.getHTMLElement();
-            htmlElement.style.top =  (currentPos.top + 10) + "px";
-        }, 60);
-    }
-};
-
-
-/**
- * [getPosition description]
- * @return {[type]} [description]
- */
-var getPosition = function() {
-
-	var htmlElement = this.getHTMLElement();
-	var left =  (htmlElement.style.left) ? htmlElement.style.left : this.getInitialPos().left;
-	var top =  (htmlElement.style.top) ? htmlElement.style.top : this.getInitialPos().top;
- 	return {
-		left: parseInt(left, 10),
-		top: parseInt(top, 10)
-	};
-};
-
-
-/**
- * [getHTMLElement description]
- * @return {[type]} [description]
- */
-var getHTMLElement = function() {
-    return  window.document.getElementById("spacecraft");
-};
-
-
-var shootRocket = function() {
-    var newRocketSpan = window.document.createElement("span");
-    newRocketSpan.className = "rocket";
-
-    newRocketSpan.style.left = this.getPosition().left + 50 +"px";
-    newRocketSpan.style.top = this.getPosition().top + 23  + "px";
-    window.document.getElementById("gameFrame").appendChild(newRocketSpan);
-
-    launchRocket(newRocketSpan);
-
-};
-
-var launchRocket = function(rocket) {
-
-   var rect = rocket.getBoundingClientRect();
-    var id = setInterval(function() {
-       if(parseInt(rocket.style.left, 10) + 15< window.innerWidth){
-            rect = rocket.getBoundingClientRect();
-            rocket.style.left = parseInt(rocket.style.left, 10) + 10 + "px";
+        if(lives <= 0) {
+            window.document.getElementById("hud_livesIcon").className = "hud_dead";
+            window.document.getElementById("hud_lives").className = "hud_dead";
+            this.die();
         }
         else {
-            clearInterval(id);
-            window.document.getElementById("gameFrame").removeChild(rocket);
+            window.document.getElementById("hud_livesIcon").className = "hud_normal";
+            window.document.getElementById("hud_lives").className = "hud_normal";
         }
-    }, 100);
+    };
 
+
+    /**
+     * [displayInfo description]
+     * @return {[type]} [description]
+     */
+    this.displayInfo = function() {
+        console.log("New Player has:");
+        console.log("  - " + lives + " lives left");
+        console.log("  - " + this.weapons.rockets.length + " rockets left");
+        console.log("  - infinite Minigun ammo");
+    };
+
+
+    /**
+     * [die description]
+     * @return {[type]} [description]
+     */
+    this.die = function() {
+        alert("AAAaaaaarrrrrggghhhh !!!");
+        alert("R.I.P");
+    };
+
+};
+
+
+
+/**
+ * [Rocket description]
+ */
+var Rocket = function() {
+
+    this.speed = 80;
+    this.power = 100;
+
+    this.playerCraft = playerCraft;
+    var playerCraftPos = null;
+
+
+    this.fire = function() {
+        playerCraftPos = getPosition(this.playerCraft.htmlElement);
+        var newRocketSpan = window.document.createElement("span");
+        newRocketSpan.className = "rocket";
+        newRocketSpan.style.left = playerCraftPos[0][0] + 50 +"px";
+        newRocketSpan.style.top = playerCraftPos[1][0] + 23  + "px";
+
+        window.document.getElementById("gameFrame").appendChild(newRocketSpan);
+        
+        var rect = newRocketSpan.getBoundingClientRect();
+        var id = setInterval(function() {
+
+
+            for(var i = 0; i < asteroids.length; i++) {
+                var asteroidPos = getPosition(asteroids[i].htmlElement);
+                var rocketPos = getPosition(newRocketSpan);
+
+               if(comparePositions(rocketPos[0], asteroidPos[0]) && comparePositions(rocketPos[1], asteroidPos[1]))
+               {
+                clearInterval(id);
+                window.document.getElementById("gameFrame").removeChild(newRocketSpan);
+                console.log("Asteroid Hit !");
+               }
+            }
+        
+            if(parseInt(newRocketSpan.style.left, 10) + 15 < window.innerWidth) {
+                rect = newRocketSpan.getBoundingClientRect();
+                newRocketSpan.style.left = parseInt(newRocketSpan.style.left, 10) + 10 + "px";
+            }
+            else {
+                clearInterval(id);
+                window.document.getElementById("gameFrame").removeChild(newRocketSpan);
+                console.log("Rocket Lost in Space!");
+            }
+        }, this.speed);
+    };
+
+
+};
+
+
+
+/**
+ * [Minigun description]
+ */
+var Minigun = function(gunPosition) {
+    this.speed = 20;
+    this.power = 1;
+    this.playerCraft = playerCraft;
+    this.gunPosition = gunPosition;
+    var playerCraftPos = null;
+
+    this.fire = function() {
+        playerCraftPos = getPosition(this.playerCraft.htmlElement);
+        var newBulletSpan = window.document.createElement("span");
+        newBulletSpan.className = "bullet";
+        newBulletSpan.style.left = playerCraftPos[0][0] + 50 +"px";
+        newBulletSpan.style.top = playerCraftPos[1][0] + this.gunPosition  + "px";
+        window.document.getElementById("gameFrame").appendChild(newBulletSpan);
+
+
+        var id = setInterval(function() {
+
+            if(parseInt(newBulletSpan.style.left, 10) + 15 < window.innerWidth) {
+                var rect = newBulletSpan.getBoundingClientRect();
+                newBulletSpan.style.left = parseInt(newBulletSpan.style.left, 10) + 10 + "px";
+            }
+            else {
+                clearInterval(id);
+                window.document.getElementById("gameFrame").removeChild(newBulletSpan);
+                console.log("Rocket Lost in Space!");
+            }
+        }, this.speed);
+    };
 };

@@ -23,21 +23,85 @@ html, body, div {
 #spacecraft {
 	height: 50px;
 	width: 50px;
-	background-color: red;
+	background-color: #555555;
 	position: absolute;
 	left: 800px ;
 	top: 500px;
+	z-index: 1;
+
+	line-height: 50px;
+	color: #222222;
+	font-size: 40px;
+	font-family: consolas;
 }
+
+#gameHud {
+	height: 70px;
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.05);
+	z-index: 2;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+#hud_livesIcon, #hud_rocketsIcon {
+	margin-left: 15px;
+	font-size: 25px;
+}
+
+#hud_lives, #hud_rockets {
+	font-size: 35px;
+}
+
+
+
+.hud_dead {
+	color: firebrick;
+}
+
+.hud_normal {
+	color: #aaaaaa;
+}
+
+
+#gameHud span {
+	font-family: consolas;
+	line-height: 70px;
+	padding: 5px;
+}
+
+
 
 
 .rocket {
 	height: 4px;
 	width: 15px;
-	background-color: green;
+	background-color: firebrick;
 	margin: 0;
 	padding: 0;
 	position: absolute;
 	z-index: 2
+}
+
+.bullet {
+	height: 2px;
+	width: 4px;
+	background-color: white;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	z-index: 2
+}
+
+.asteroid {
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	background-color: #5C3907;
+	position: absolute;
+	left: 1500px;
+	top: 500px;
 }
 
 

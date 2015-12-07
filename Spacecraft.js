@@ -11,11 +11,14 @@ var SpaceCraft = function(htmlElement) {
     var lives = 5;
 
     this.htmlElement = htmlElement;
-    this.isMoving = false;
+    this.isMovingRight = false;
+    this.isMovingLeft = false;
+    this.isMovingUp = false;
+    this.isMovingDown = false;
     this.isFiring = false;
     this.weapons = {
         rockets: [],
-         miniguns: []
+        miniguns: []
     };
 
 
@@ -23,70 +26,73 @@ var SpaceCraft = function(htmlElement) {
      * [moveRight description]
      * @return {[type]} [description]
      */
-    this.moveRight = function() { 
-        if (!this.isMoving) {
-            
-            this.isMoving = true;
+    this.moveRight = function() {
+        if (!this.isMovingRight) {
+
+            this.isMovingRight = true;
             var that = this;
 
-            intervalID = setInterval(function() {
+            moveRightintervalID = setInterval(function() {
                 var currentPos = getPosition(that.htmlElement);
                 that.htmlElement.style.left =  (currentPos[0][0] + 10) + "px";
-            }, 60);
+            }, 40);
         }
     };
+
 
     /**
      * [moveLeft description]
      * @return {[type]} [description]
      */
-    this.moveLeft = function() { 
-        if (!this.isMoving) {
-            
-            this.isMoving = true;
+    this.moveLeft = function() {
+        if (!this.isMovingLeft) {
+
+            this.isMovingLeft = true;
             var that = this;
 
-            intervalID = setInterval(function() {
+            moveLeftintervalID = setInterval(function() {
                 var currentPos = getPosition(that.htmlElement);
                 that.htmlElement.style.left =  (currentPos[0][0] - 10) + "px";
-            }, 60);
+            }, 40);
         }
     };
+
 
     /**
      * [moveUp description]
      * @return {[type]} [description]
      */
-    this.moveUp = function() { 
-        if (!this.isMoving) {
-            
-            this.isMoving = true;
+    this.moveUp = function() {
+        if (!this.isMovingUp) {
+
+            this.isMovingUp = true;
             var that = this;
 
-            intervalID = setInterval(function() {
+            moveUpintervalID = setInterval(function() {
                 var currentPos = getPosition(that.htmlElement);
                 that.htmlElement.style.top =  (currentPos[1][0] - 10) + "px";
-            }, 60);
+            }, 40);
         }
     };
+
 
     /**
      * [moveDown description]
      * @return {[type]} [description]
      */
-    this.moveDown = function() { 
-        if (!this.isMoving) {
-            
-            this.isMoving = true;
+    this.moveDown = function() {
+        if (!this.isMovingDown) {
+
+            this.isMovingDown = true;
             var that = this;
 
-            intervalID = setInterval(function() {
+            moveDownintervalID = setInterval(function() {
                 var currentPos = getPosition(that.htmlElement);
                 that.htmlElement.style.top =  (currentPos[1][0] + 10) + "px";
-            }, 60);
+            }, 40);
         }
     };
- 
+
 
     /**
      * [getInitialPos description]
@@ -96,7 +102,7 @@ var SpaceCraft = function(htmlElement) {
         return initialPos;
     };
 
-    
+
 
     /**
      * [shootRocket description]
@@ -154,7 +160,7 @@ var SpaceCraft = function(htmlElement) {
         lives += modifier;
 
         window.document.getElementById("hud_lives").innerHTML = lives;
-        
+
         if(lives <= 0) {
             window.document.getElementById("hud_livesIcon").className = "hud_dead";
             window.document.getElementById("hud_lives").className = "hud_dead";
@@ -208,30 +214,33 @@ var Rocket = function() {
         playerCraftPos = getPosition(this.playerCraft.htmlElement);
         var newRocketSpan = window.document.createElement("span");
         newRocketSpan.className = "rocket";
-        newRocketSpan.style.left = playerCraftPos[0][0] + 50 +"px";
-        newRocketSpan.style.top = playerCraftPos[1][0] + 23  + "px";
+        newRocketSpan.style.left = playerCraftPos[0][0] + 78 +"px";
+        newRocketSpan.style.top = playerCraftPos[1][0] + 44  + "px";
 
         window.document.getElementById("gameFrame").appendChild(newRocketSpan);
-        
+
         var rect = newRocketSpan.getBoundingClientRect();
         var id = setInterval(function() {
 
-
+            // loop through all the asteroids to check if one is getting hit by the rocket
             for(var i = 0; i < asteroids.length; i++) {
                 var asteroidPos = getPosition(asteroids[i].htmlElement);
                 var rocketPos = getPosition(newRocketSpan);
 
-               if(comparePositions(rocketPos[0], asteroidPos[0]) && comparePositions(rocketPos[1], asteroidPos[1]))
-               {
-                clearInterval(id);
-                window.document.getElementById("gameFrame").removeChild(newRocketSpan);
-                console.log("Asteroid Hit !");
-               }
+                // The positions of the rocket and an asteroid overlap => asteroid hit !
+                if(comparePositions(rocketPos[0], asteroidPos[0]) && comparePositions(rocketPos[1], asteroidPos[1]))
+                {
+                    asteroids[i].die();
+                    clearInterval(id);
+                    window.document.getElementById("gameFrame").removeChild(newRocketSpan);
+                    console.log("Asteroid Hit !");
+                }
             }
-        
+
+            // check if rocket is out of screen
             if(parseInt(newRocketSpan.style.left, 10) + 15 < window.innerWidth) {
                 rect = newRocketSpan.getBoundingClientRect();
-                newRocketSpan.style.left = parseInt(newRocketSpan.style.left, 10) + 10 + "px";
+                newRocketSpan.style.left = parseInt(newRocketSpan.style.left, 10) + 15 + "px";
             }
             else {
                 clearInterval(id);
@@ -240,8 +249,6 @@ var Rocket = function() {
             }
         }, this.speed);
     };
-
-
 };
 
 
@@ -260,7 +267,7 @@ var Minigun = function(gunPosition) {
         playerCraftPos = getPosition(this.playerCraft.htmlElement);
         var newBulletSpan = window.document.createElement("span");
         newBulletSpan.className = "bullet";
-        newBulletSpan.style.left = playerCraftPos[0][0] + 50 +"px";
+        newBulletSpan.style.left = playerCraftPos[0][0] + 40 +"px";
         newBulletSpan.style.top = playerCraftPos[1][0] + this.gunPosition  + "px";
         window.document.getElementById("gameFrame").appendChild(newBulletSpan);
 

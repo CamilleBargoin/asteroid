@@ -3,10 +3,40 @@ var asteroidId = 0;
 var Asteroid = function(htmlElement) {
     this.id = asteroidId++;
 	this.health = 100;
-
 	this.htmlElement = htmlElement;
-    var asteroidMoveId = null;
+    this.isMoving = false;
+    var asteroidnimationRequestId = null;
+    this.destroyed = false;
 
+    this.explosionAnimation = [{
+        x: 0,
+        y: 0,
+        width: 61,
+        height: 103
+    },{
+        x: -61,
+        y: 0,
+        width: 82,
+        height: 103
+    },
+    {
+        x: -143,
+        y: 0,
+        width: 93,
+        height: 103
+    },
+    {
+        x: -236,
+        y: 0,
+        width: 95,
+        height: 103
+    },
+    {
+        x: -318,
+        y: 0,
+        width: 72,
+        height: 103
+    }];
 
     /**
      * [move description]
@@ -15,13 +45,40 @@ var Asteroid = function(htmlElement) {
     this.move = function() {
 
         var that = this;
-        asteroidMoveId = setInterval(function() {
-            var currentPos = getPosition(that.htmlElement);
-            that.htmlElement.style.left =  (currentPos[0][0] - 10) + "px";
-            if(currentPos[0][0] <= 0) {
-                 that.die();
+        var oldTimestamp;
+        this.isMoving = true;
+
+        var animate = function(currentTimestamp) {
+
+            oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
+            var delta = currentTimestamp - oldTimestamp;
+
+            if (delta > 30 && that.isMoving) {
+
+                var currentPos = that.getPosition(that.htmlElement);
+                that.htmlElement.style.left =  (currentPos[0][0] - 10) + "px";
+                if(currentPos[0][0] <= 0) {
+                     that.isMoving = false;
+                     console.log("Asteroid leaves screen");
+                     that.die();
+                }
+
+
+                var spaceshipHit = that.checkCollision(elements.spaceships);
+
+                if (spaceshipHit) {
+                    that.isMoving = false;
+                    spaceshipHit.damage();
+                    that.damage(100);
+                }
+                oldTimestamp = currentTimestamp;
             }
-        }, 40);
+
+            if (that.isMoving)
+                that.asteroidMoveId = window.requestAnimationFrame(animate);
+        };
+
+        that.asteroidMoveId = window.requestAnimationFrame(animate);
     };
 
 
@@ -31,19 +88,44 @@ var Asteroid = function(htmlElement) {
      */
     this.die = function() {
 
-        //romves the asteroid from the screen
-        clearInterval(asteroidMoveId);
-         window.document.getElementById("gameFrame").removeChild(this.htmlElement);
+        this.isMoving = false;
+
+        if (this.htmlElement) {
+            window.document.getElementById("gameFrame").removeChild(this.htmlElement);
+        }
 
         //removes Asteroid from the global array Asteroids
-         for(var i = 0; i < asteroids.length; i++) {
-            if(asteroids[i].id == this.id)
-                asteroids.splice(i, 1);
+         for(var i = 0; i < elements.asteroids.length; i++) {
+            if(elements.asteroids[i].id == this.id) {
+                elements.asteroids[i] = null;
+                elements.asteroids.splice(i, 1);
+            }
          }
     };
 
-};
+    this.explode = function() {
 
+        var that = this;
+
+        this.isMoving = false;
+        var counterElement = window.document.getElementById("asteroidDestroyed");
+        counterElement.innerHTML = parseInt(counterElement.innerHTML, 10) + 1;
+
+        explodeAnimate(this, function() {
+            that.die();
+        });
+    };
+
+
+    this.damage = function(power) {
+        this.health -= power;
+
+        if (this.health <= 0 && !this.destroyed) {
+            this.explode();
+            this.destroyed = true;
+        }
+    };
+};
 
 
 
@@ -56,17 +138,17 @@ var AsteroidGenerator = function() {
             var asteroidSpan = window.document.createElement("span");
             asteroidSpan.className = "asteroid";
 
-
-            asteroidSpan.style.left = "1800px";
-            asteroidSpan.style.top = Math.random() * 700 + 100 + "px";
+            asteroidSpan.style.left = window.innerWidth + "px";
+            asteroidSpan.style.top = (Math.random() * window.innerHeight - 100) + 100 + "px";
 
             window.document.getElementById("gameFrame").appendChild(asteroidSpan);
+
             var newAsteroid = new Asteroid(asteroidSpan);
             newAsteroid.move();
 
-            asteroids.push(newAsteroid);
+            elements.asteroids.push(newAsteroid);
 
-        }, 1500);
+        }, 600);
 
     };
 
@@ -76,3 +158,7 @@ var AsteroidGenerator = function() {
     };
 
 };
+
+Asteroid.prototype = new Utils();
+
+

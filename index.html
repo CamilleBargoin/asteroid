@@ -5,15 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link rel="stylesheet" href="asteroid.css">
-    <script src="Spacecraft.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="Utils.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="Spaceship.js" type="text/javascript" charset="utf-8" async defer></script>
     <script src="Asteroid.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="main.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script>
-
-    </script>
+    <script src="Bonus.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="Game.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script></script>
 </head>
 <body>
     <div id="mainContainer">
+    <div id="backgroundScroll2">
+        </div>
+        <div id="backgroundScroll">
+        </div>
         <div id="gameFrame">
             <div id="gameHud">
                 <span id="hud_livesIcon" class="hud_normal">LIVES:</span>
@@ -22,6 +26,7 @@
                 <span id="hud_rockets" class="hud_normal"></span>
                 <span id="startAsteroids">Start</span>
                 <span id="stopAsteroids">Stop</span>
+                <span id="asteroidDestroyed"></span>
             </div>
 
         </div>

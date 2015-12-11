@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link rel="stylesheet" href="asteroid.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="Utils.js" type="text/javascript" charset="utf-8" async defer></script>
     <script src="Spaceship.js" type="text/javascript" charset="utf-8" async defer></script>
     <script src="Asteroid.js" type="text/javascript" charset="utf-8" async defer></script>
@@ -14,9 +15,9 @@
 </head>
 <body>
     <div id="mainContainer">
-    <div id="backgroundScroll2">
+    <div id="backgroundScroll2" class="horizontal_scrollFast">
         </div>
-        <div id="backgroundScroll">
+        <div id="backgroundScroll" class="horizontal_scroll">
         </div>
         <div id="gameFrame">
             <div id="gameHud">
@@ -26,7 +27,9 @@
                 <span id="hud_rockets" class="hud_normal"></span>
                 <span id="startAsteroids">Start</span>
                 <span id="stopAsteroids">Stop</span>
+                <span id="rotate">Waouh!</span>
                 <span id="asteroidDestroyed"></span>
+
             </div>
 
         </div>

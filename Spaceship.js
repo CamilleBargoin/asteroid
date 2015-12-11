@@ -39,9 +39,8 @@ var Spaceship = function(htmlElement) {
                 var delta = currentTimestamp - oldTimestamp;
 
                 if (delta > 40) {
-                    var currentPos = that.getPosition();
-                    if (currentPos[0][0] < window.innerWidth - 100)
-                        that.htmlElement.style.left =  (currentPos[0][0] + 10) + "px";
+                    if (that.htmlElement.position().left < window.innerWidth - 100)
+                        that.htmlElement.css("left",  (that.htmlElement.position().left + 10) + "px");
                 }
 
                 moveRightAnimationId = window.requestAnimationFrame(animate);
@@ -67,10 +66,9 @@ var Spaceship = function(htmlElement) {
                 var delta = currentTimestamp - oldTimestamp;
 
                 if (delta > 40) {
-                    var currentPos = that.getPosition();
 
-                    if (currentPos[0][0] > 0)
-                        that.htmlElement.style.left =  (currentPos[0][0] - 10) + "px";
+                    if (that.htmlElement.position().left > 0)
+                        that.htmlElement.css("left",   (that.htmlElement.position().left - 10) + "px");
                 }
 
                 moveLeftAnimationId = window.requestAnimationFrame(animate);
@@ -94,10 +92,10 @@ var Spaceship = function(htmlElement) {
             var animate = function(currentTimestamp) {
                 oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
                 var delta = currentTimestamp - oldTimestamp;
+
                 if (delta > 40) {
-                    var currentPos = that.getPosition();
-                    if (currentPos[1][0] > 0)
-                        that.htmlElement.style.top = (currentPos[1][0] - 10) + "px";
+                    if (that.htmlElement.position().top > 0)
+                        that.htmlElement.css("top", (that.htmlElement.position().top - 10) + "px");
                 }
                 moveUpAnimationId = window.requestAnimationFrame(animate);
             };
@@ -121,15 +119,22 @@ var Spaceship = function(htmlElement) {
             var animate = function(currentTimestamp) {
                 oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
                 var delta = currentTimestamp - oldTimestamp;
+
                 if (delta > 40) {
-                    var currentPos = that.getPosition();
-                    if (currentPos[1][0] < window.innerHeight - 90)
-                        that.htmlElement.style.top =  (currentPos[1][0] + 10) + "px";
+                    if (that.htmlElement.position().top < window.innerHeight - 90)
+                        that.htmlElement.css("top",  (that.htmlElement.position().top + 10) + "px");
                 }
                 moveDownAnimationId = window.requestAnimationFrame(animate);
             };
             moveDownAnimationId = window.requestAnimationFrame(animate);
         }
+    };
+
+
+    this.rotate = function() {
+
+           // this.htmlElement.addClass('rotateUp');
+
     };
 
     /**
@@ -141,10 +146,10 @@ var Spaceship = function(htmlElement) {
         if (this.weapons.rockets.length > 0) {
             this.weapons.rockets[this.weapons.rockets.length - 1].fire();
             this.weapons.rockets.pop();
-            window.document.getElementById("hud_rockets").innerHTML = this.weapons.rockets.length;
+            $("#hud_rockets").innerHTML = this.weapons.rockets.length;
             if (this.weapons.rockets.length === 0) {
-                window.document.getElementById("hud_rocketsIcon").className = "hud_dead";
-                window.document.getElementById("hud_rockets").className = "hud_dead";
+                $("#hud_rocketsIcon").className = "hud_dead";
+                $("#hud_rockets").className = "hud_dead";
             }
         } else {
             alert("no more !");
@@ -187,16 +192,16 @@ var Spaceship = function(htmlElement) {
     this.setLives = function(modifier) {
         lives += modifier;
 
-        window.document.getElementById("hud_lives").innerHTML = lives;
+        $("#hud_lives").html(lives);
 
         if(lives <= 0) {
-            window.document.getElementById("hud_livesIcon").className = "hud_dead";
-            window.document.getElementById("hud_lives").className = "hud_dead";
+            $("#hud_livesIcon").className = "hud_dead";
+            $("#hud_lives").className = "hud_dead";
             this.die();
         }
         else {
-            window.document.getElementById("hud_livesIcon").className = "hud_normal";
-            window.document.getElementById("hud_lives").className = "hud_normal";
+            $("#hud_livesIcon").className = "hud_normal";
+            $("#hud_lives").className = "hud_normal";
         }
     };
 
@@ -219,18 +224,16 @@ var Spaceship = function(htmlElement) {
      */
     this.die = function() {
         alert("AAAaaaaarrrrrggghhhh !!!");
-
     };
 
 
     this.addMoreRockets = function () {
         this.weapons.rockets.push(new Rocket());
-        window.document.getElementById("hud_rockets").innerHTML = this.weapons.rockets.length;
+        $("#hud_rockets").html(this.weapons.rockets.length);
     };
 
     this.damage = function() {
         this.setLives(-1);
-
     };
 
 };
@@ -253,15 +256,15 @@ var Rocket = function() {
     this.fire = function() {
         this.isMoving = true;
 
-        playerCraftPos =  this.playerShip.getPosition();
-        var newRocketSpan = window.document.createElement("span");
-        newRocketSpan.className = "rocket";
-        newRocketSpan.style.left = playerCraftPos[0][0] + 78 +"px";
-        newRocketSpan.style.top = playerCraftPos[1][0] + 44  + "px";
+        var $newRocketSpan = $("<span class='rocket'></span>");
+        $newRocketSpan.css({
+            left: this.playerShip.htmlElement.position().left + 78 +"px",
+            top: this.playerShip.htmlElement.position().top + 44  + "px"
+        });
 
-        window.document.getElementById("gameFrame").appendChild(newRocketSpan);
+        $("#gameFrame").append($newRocketSpan);
 
-        var rect = newRocketSpan.getBoundingClientRect();
+        this.htmlElement = $newRocketSpan;
 
         var that = this;
         var animationId;
@@ -274,27 +277,24 @@ var Rocket = function() {
 
             if (delta > that.speed) {
 
-
-
                 // check if rocket is out of screen
-                if(parseInt(newRocketSpan.style.left, 10) + 15 < window.innerWidth) {
-                    rect = newRocketSpan.getBoundingClientRect();
-                    newRocketSpan.style.left = parseInt(newRocketSpan.style.left, 10) + 15 + "px";
+                if($newRocketSpan.position().left + 15 < window.innerWidth) {
+                    $newRocketSpan.css("left",  $newRocketSpan.position().left + 15 + "px");
                 }
                 else {
                     that.isMoving = false;
-                    if (newRocketSpan)
-                        window.document.getElementById("gameFrame").removeChild(newRocketSpan);
+                    if ($newRocketSpan)
+                        $newRocketSpan.remove();
                     console.log("Rocket Lost in Space!");
                 }
 
-                var asteroidHit = that.checkCollision( elements.asteroids, newRocketSpan);
+                var asteroidHit = that.checkCollision( elements.asteroids);
 
                 if (asteroidHit) {
                     asteroidHit.explode();
                     that.isMoving = false;
-                    if (newRocketSpan)
-                        window.document.getElementById("gameFrame").removeChild(newRocketSpan);
+                    if ($newRocketSpan)
+                        $newRocketSpan.remove();
                     console.log("Asteroid Hit !");
                 }
 
@@ -326,13 +326,17 @@ var Minigun = function(gunPosition) {
 
     this.fire = function() {
 
-        playerCraftPos = this.playerShip.getPosition();
-        var newBulletSpan = window.document.createElement("span");
-        newBulletSpan.className = "bullet";
-        newBulletSpan.style.left = playerCraftPos[0][0] + 40 +"px";
-        newBulletSpan.style.top = playerCraftPos[1][0] + this.gunPosition  + "px";
-        newBulletSpan.isMoving = true;
-        window.document.getElementById("gameFrame").appendChild(newBulletSpan);
+        var $newBulletSpan = $("<span class='bullet'></span>");
+        $newBulletSpan.css({
+            left: this.playerShip.htmlElement.position().left + 40 +"px",
+            top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
+        });
+        $("#gameFrame").append($newBulletSpan);
+
+
+        this.htmlElement = $newBulletSpan;
+
+        $newBulletSpan.isMoving = true;
 
         var oldTimestamp;
         var animationId;
@@ -345,28 +349,29 @@ var Minigun = function(gunPosition) {
             if (delta > that.speed) {
 
 
-
-                if(parseInt(newBulletSpan.style.left, 10) + 15 < window.innerWidth) {
-                    var rect = newBulletSpan.getBoundingClientRect();
-                    newBulletSpan.style.left = parseInt(newBulletSpan.style.left, 10) + 10 + "px";
+                if($newBulletSpan.position().left + 15 < window.innerWidth) {
+                    $newBulletSpan.css("left", $newBulletSpan.position().left + 10 + "px");
                 }
                 else {
-                    newBulletSpan.isMoving = false;
-                    if (newBulletSpan);
-                        window.document.getElementById("gameFrame").removeChild(newBulletSpan);
+                    $newBulletSpan.isMoving = false;
+                    if ($newBulletSpan);
+                        $newBulletSpan.remove();
                 }
 
-                var asteroidHit = that.checkCollision(elements.asteroids, newBulletSpan);
+                /*var asteroidHit = that.checkCollision(elements.asteroids, $newBulletSpan);
 
                 if (asteroidHit) {
 
                     asteroidHit.damage(that.power);
-                    if (newBulletSpan)
-                        window.document.getElementById("gameFrame").removeChild(newBulletSpan);
-                    newBulletSpan.isMoving = false;
-                }
+                    if ($newBulletSpan)
+                        $newBulletSpan.remove();
+                    $newBulletSpan.isMoving = false;
+                }*/
+
+
+               oldTimestamp = currentTimestamp;
             }
-            if (newBulletSpan.isMoving)
+            if ($newBulletSpan.isMoving)
                 animationId = window.requestAnimationFrame(animate);
 
         };
@@ -374,6 +379,6 @@ var Minigun = function(gunPosition) {
     };
 };
 
-Minigun.prototype = new Utils();
-Rocket.prototype = new Utils();
-Spaceship.prototype = new Utils();
+//Minigun.prototype = new Utils();
+//Rocket.prototype = new Utils();
+//Spaceship.prototype = new Utils();

@@ -12,13 +12,21 @@ var BonusFactory = function(args) {
         this.rgba = args.rgba;
 
         this.createElement = function() {
-            this.htmlElement = window.document.createElement("img");
-            this.htmlElement.className = this.className;
-            this.htmlElement.style.left =  window.innerWidth + "px";
-            this.htmlElement.src = this.src;
-            this.htmlElement.style.top = (Math.random() * window.innerHeight - 100) + 100 + "px";
+            this.htmlElement = $("<img></img>");
+            //this.htmlElement.className = this.className;
+            //this.htmlElement.style.left =  window.innerWidth + "px";
+            //this.htmlElement.src = this.src;
+            //this.htmlElement.style.top = (Math.random() * window.innerHeight - 100) + 100 + "px";
 
-            window.document.getElementById("gameFrame").appendChild(this.htmlElement);
+            this.htmlElement.css({
+                top: (Math.random() * window.innerHeight - 100) + 100 + "px",
+                left: window.innerWidth + "px"
+            });
+
+            this.htmlElement.attr("src", this.src);
+            this.htmlElement.addClass(this.className);
+
+           $("#gameFrame").append(this.htmlElement);
         };
 
         this.launch = function() {
@@ -37,20 +45,19 @@ var BonusFactory = function(args) {
                 var deltaY = currentTimestamp - oldTimestampY;
                 var spaceshipHit, currentPos = null;
 
-
                 if (deltaX > 30) {
 
-                    currentPos = that.getPosition();
-                    that.htmlElement.style.left =  (currentPos[0][0] - 7) + "px";
+                    currentPos = that.htmlElement.position();
+                    that.htmlElement.css("left", (currentPos.left - 7) + "px");
 
 
-                   if (randomSign > 0 && currentPos[1][0] >= window.innerHeight - 64 || randomSign < 0 && currentPos[1][0] <= 0){
+                   if (randomSign > 0 && currentPos.top >= window.innerHeight - 64 || randomSign < 0 && currentPos.top <= 0){
                         randomSign  = randomSign * -1;
                     }
 
-                    that.htmlElement.style.top = (currentPos[1][0] + (5 * randomSign)) + "px";
+                    that.htmlElement.css("top", (currentPos.top + (5 * randomSign)) + "px");
 
-                    if(currentPos[0][0] <= 0 ) {
+                    if(currentPos.left <= 0 ) {
                          that.isMoving = false;
                          console.log("You just missed the " + that.name + " Bonus ! :'(");
                          that.destroy();
@@ -83,14 +90,14 @@ var BonusFactory = function(args) {
 
 
         this.displayBonus = function() {
-            var displayBonusContainer = window.document.createElement("div");
-            displayBonusContainer.className = "displayBonusContainer";
-            displayBonusContainer.style.backgroundColor = "rgba(" + this.rgba + ")";
-            displayBonusContainer.innerHTML = (this.name + " learned !").toUpperCase();
-            window.document.body.appendChild(displayBonusContainer);
+            var $displayBonusContainer = $("<div></div>");
+            $displayBonusContainer.addClass("displayBonusContainer");
+            $displayBonusContainer.css("backgroundColor", "rgba(" + this.rgba + ")");
+            $displayBonusContainer.html((this.name + " learned !").toUpperCase());
+            $("body").append($displayBonusContainer);
 
             setTimeout(function() {
-                 window.document.body.removeChild(displayBonusContainer);
+                 $displayBonusContainer.remove();
              }, 1000);
         };
 
@@ -101,7 +108,7 @@ var BonusFactory = function(args) {
          */
         this.destroy = function() {
             if (this.htmlElement)
-                window.document.getElementById("gameFrame").removeChild(this.htmlElement);
+                this.htmlElement.remove();
 
             //removes Bonus from the global array elements.Bonuses
              for(var i = 0; i < elements.bonuses.length; i++) {

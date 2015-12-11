@@ -55,9 +55,10 @@ var Asteroid = function(htmlElement) {
 
             if (delta > 30 && that.isMoving) {
 
-                var currentPos = that.getPosition(that.htmlElement);
-                that.htmlElement.style.left =  (currentPos[0][0] - 10) + "px";
-                if(currentPos[0][0] <= 0) {
+                var currentPos = that.htmlElement.position();
+                that.htmlElement.css("left", (currentPos.left - 10) + "px");
+
+                if(currentPos.left <= 0) {
                      that.isMoving = false;
                      console.log("Asteroid leaves screen");
                      that.die();
@@ -71,6 +72,7 @@ var Asteroid = function(htmlElement) {
                     spaceshipHit.damage();
                     that.damage(100);
                 }
+
                 oldTimestamp = currentTimestamp;
             }
 
@@ -91,7 +93,7 @@ var Asteroid = function(htmlElement) {
         this.isMoving = false;
 
         if (this.htmlElement) {
-            window.document.getElementById("gameFrame").removeChild(this.htmlElement);
+            this.htmlElement.remove();
         }
 
         //removes Asteroid from the global array Asteroids
@@ -108,10 +110,10 @@ var Asteroid = function(htmlElement) {
         var that = this;
 
         this.isMoving = false;
-        var counterElement = window.document.getElementById("asteroidDestroyed");
+        var counterElement = $("#asteroidDestroyed");
         counterElement.innerHTML = parseInt(counterElement.innerHTML, 10) + 1;
 
-        explodeAnimate(this, function() {
+        this.explodeAnimate(this, function() {
             that.die();
         });
     };
@@ -128,22 +130,24 @@ var Asteroid = function(htmlElement) {
 };
 
 
-
 var AsteroidGenerator = function() {
     var generationIntervalId = null;
 
     this.start = function() {
         generationIntervalId = setInterval(function() {
 
-            var asteroidSpan = window.document.createElement("span");
-            asteroidSpan.className = "asteroid";
+            var $asteroidSpan = $("<span></span>");
+            $asteroidSpan.addClass("asteroid");
 
-            asteroidSpan.style.left = window.innerWidth + "px";
-            asteroidSpan.style.top = (Math.random() * window.innerHeight - 100) + 100 + "px";
+            $asteroidSpan.css({
+                left: window.innerWidth + "px",
+                top: (Math.random() * window.innerHeight - 100) + 100 + "px"
+            });
 
-            window.document.getElementById("gameFrame").appendChild(asteroidSpan);
+            $("#gameFrame").append($asteroidSpan);
 
-            var newAsteroid = new Asteroid(asteroidSpan);
+            var newAsteroid = new Asteroid($asteroidSpan);
+
             newAsteroid.move();
 
             elements.asteroids.push(newAsteroid);
@@ -159,6 +163,6 @@ var AsteroidGenerator = function() {
 
 };
 
-Asteroid.prototype = new Utils();
+//Asteroid.prototype = new Utils();
 
 

@@ -3,10 +3,25 @@ html, body, div {
 	margin: 0;
 }
 
+a {
+	text-decoration: none;
+	color: #000;
+}
+
+@font-face {
+    font-family: "Neuropol";
+    src: url(neuropol.ttf);
+}
+
+@font-face {
+    font-family: "Planer";
+    src: url(Planer_Reg.otf);
+}
+
 #mainContainer {
 	width: 100hh;
 	height: 100vh;
-	background-color: #333;
+	background-color: #000;
 	margin: 0 auto;
 	padding: 0;
 }
@@ -60,27 +75,165 @@ html, body, div {
 	left: 0;
 	width: 100%;
 	height: 100%;
+	padding: 0;
+	margin: 0;
+	z-index: 2;
 }
 
-#spacecraft {
-	height: 91px;
-	width: 80px;
+
+#menu {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0;
+	display: table;
+	
+	overflow: hidden;
+}
+
+#menuBackground {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background: url("./img/backgrounds/background_menu.jpg") center center;
+}
+
+#menuBackgroundParallax {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background: url("./img/backgrounds/background_menu_parallax.png") center center;
+}
+
+
+#menu h1 {
+	color: white;
+	text-align: center;
+	font-size: 3em;
+	text-transform: uppercase;
+	font-family: "Neuropol";
+	letter-spacing: 0.3em;
+}
+
+#menuHeader{
+	display: table-row;
+	height: 20%;
+	width: 100%;
+}
+
+#menuFooter {
+	display: table-row;
+	height: 10%;
+	width: 100%;
+}
+
+#menuList {
+	display: table-row;
+	height: 70%;
+}
+
+#menu ul li{
+	margin: 20px auto;
+	width: 543px;
+	height: 167px;
+	background-image: url("./img/gui/main_button_1.png");
+	list-style: none;
+}
+
+#menu ul li a {
+	line-height: 167px;
+	color: #fff;
+	font-size: 2.1em;
+	text-align: left;
+	width: 100%;
+	display: block;
+	font-family: "Neuropol";
+	padding-left: 164px;
+	cursor: pointer;
+	letter-spacing: 0.2em;
+}
+
+/*
+#menu ul li:hover {
+	background-image: url("./img/gui/main_button_1_selected.png");
+}
+*/
+
+
+
+#spaceship {
+	height: 112px;
+	width: 112px;
+	position: absolute;
+	left: 0px ;
+	top: 0px;
+	z-index: 2;
+
+	background-image: url("./img/spaceship_01.png");
+}
+
+#spaceshipContainer {
+	height: 112px;
+	width: 112px;
 	position: absolute;
 	left: 800px ;
 	top: 500px;
-	z-index: 1;
-
-	background-image: url("spaceshipSmall.png");
+	z-index: 2;
 }
 
+
+
+
 #gameHud {
-	height: 70px;
 	width: 100%;
-	background-color: rgba(255, 255, 255, 0.05);
-	z-index: 2;
+	z-index: 3;
 	position: absolute;
 	left: 0;
 	top: 0;
+	display: none;
+}
+
+#hud_lives_score {
+	width: 516px;
+	height: 206px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-image: url("./img/gui/hud_lives_score.png");
+}
+
+#hud_menu {
+	width: 26px;
+	height: 25px;
+	/*background-color: rgba(255,0,0,0.8);*/
+	background: url("./img/gui/menu_button.png");
+	position: absolute;
+	top: 24px;
+	left: 38px;
+	z-index: 4;
+	cursor: pointer;
+}
+
+#hud_pause {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-image: url("./img/gui/hud_pause.png");
+	width: 168px;
+	height: 186px;
+}
+
+
+#hud_start {
+	background-color: lime;
+	cursor: pointer;
+	font-family: consolas;
+	line-height: 70px;
+	padding: 5px;
+	left: 50%;
+	position: absolute;
 }
 
 #hud_livesIcon, #hud_rocketsIcon {
@@ -106,44 +259,48 @@ html, body, div {
 	color: #aaaaaa;
 }
 
-
+/*
 #gameHud span {
 	font-family: consolas;
 	line-height: 70px;
 	padding: 5px;
-}
+}*/
 
 
 .rocket {
-	height: 6px;
-	width: 24px;
+	height: 20px;
+	width: 38px;
 	/*background-color: firebrick;*/
-	background: url("redLaserSmall.png");
+	background: url("./img/rocket.png");
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	z-index: 2
+	z-index: 3
 }
 
 .bullet {
-	height: 2px;
-	width: 8px;
+	height: 4px;
+	width: 28px;
 	/*background-color: white;*/
-	background: url("laserSmall.png");
+	background: url("./img/bullet_violet.png");
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	z-index: 2
+	z-index: 3
 }
 
 .asteroid {
-	width: 120px;
-	height: 115px;
-
 	position: absolute;
-	background-image: url("asteroid.png");
-	/*left: 1500px;
-	top: 500px;*/
+}
+
+.spaceshipFlame {
+	background: url("./img/spaceship_flame.png");
+	background-position: 0 0;
+	width: 51px;
+	height: 14px;
+	left: -23px;
+	position: absolute;
+	z-index: 1;
 }
 
 
@@ -157,18 +314,42 @@ html, body, div {
 	cursor: pointer;
 }
 
+#menuButton {
+	background-color: lime;
+	cursor: pointer;
+}
+
 #rotate {
 	background-color: lime;
 	cursor: pointer;
 }
 
-#asteroidDestroyed {
-	color: lime;
-	float: right;
-	margin-right: 30px;
-	font-size: 50px;
+#scoreLeft {
+	color: white;
+	font-size: 65px;
 	font-weight: bold;
-	font-family: consolas;
+	font-family: "Planer";
+	position: absolute;
+	top: 37px;
+	left: 207px;
+	text-align: right;
+	width: 125px;
+	padding: 0;
+	margin: 0;
+}
+
+#scoreRight {
+	color: white;
+	font-size: 55px;
+	font-weight: bold;
+	font-family: "Planer";
+	position: absolute;
+	top: 47px;
+	left: 340px;
+	text-align: right;
+	width: 98px;
+	padding: 0;
+	margin: 0;
 }
 
 

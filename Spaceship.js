@@ -1,5 +1,5 @@
 /**
- * [SpaceCraft description]
+ * [Spaceship description]
  */
 var Spaceship = function(htmlElement) {
 
@@ -39,14 +39,16 @@ var Spaceship = function(htmlElement) {
                 var delta = currentTimestamp - oldTimestamp;
 
                 if (delta > 40) {
-                    if (that.htmlElement.position().left < window.innerWidth - 100)
+                    if (that.htmlElement.position().left < window.innerWidth - 100) {
+                        $(".spaceshipFlame").css("left", "-44px");
                         that.htmlElement.css("left",  (that.htmlElement.position().left + 10) + "px");
+                    }
                 }
-
                 moveRightAnimationId = window.requestAnimationFrame(animate);
             };
             moveRightAnimationId = window.requestAnimationFrame(animate);
         }
+
     };
 
 
@@ -66,7 +68,7 @@ var Spaceship = function(htmlElement) {
                 var delta = currentTimestamp - oldTimestamp;
 
                 if (delta > 40) {
-
+                    $(".spaceshipFlame").css("left", "-8px");
                     if (that.htmlElement.position().left > 0)
                         that.htmlElement.css("left",   (that.htmlElement.position().left - 10) + "px");
                 }
@@ -171,7 +173,7 @@ var Spaceship = function(htmlElement) {
                 for(var i = 0; i < that.weapons.miniguns.length; i++) {
                     that.weapons.miniguns[i].fire();
                 }
-            }, 100);
+            }, 200);
         }
     };
 
@@ -236,6 +238,29 @@ var Spaceship = function(htmlElement) {
         this.setLives(-1);
     };
 
+
+    this.showFlame = function() {
+        var $flameLeft = $("<span class='spaceshipFlame'></span>");
+        $flameLeft.css("top", "11px");
+
+        var $flameRight = $("<span class='spaceshipFlame'></span>");
+        $flameRight.css("top", "87px");
+
+        $("#spaceshipContainer").append($flameLeft);
+        $("#spaceshipContainer").append($flameRight);
+
+        var positionY = 0;
+        function animateSprite() {
+ 
+            $(".spaceshipFlame").css("backgroundPosition",  '0px ' + positionY + "px");
+            positionY += 30;
+             
+            ti = setTimeout(animateSprite, 80);    
+        }
+             
+        animateSprite();
+    };
+
 };
 
 
@@ -245,7 +270,7 @@ var Spaceship = function(htmlElement) {
  */
 var Rocket = function() {
 
-    this.speed = 50;
+    this.speed = 8;
     this.power = 100;
 
     this.playerShip = playerShip;
@@ -258,8 +283,8 @@ var Rocket = function() {
 
         var $newRocketSpan = $("<span class='rocket'></span>");
         $newRocketSpan.css({
-            left: this.playerShip.htmlElement.position().left + 78 +"px",
-            top: this.playerShip.htmlElement.position().top + 44  + "px"
+            left: this.playerShip.htmlElement.position().left + 105 +"px",
+            top: this.playerShip.htmlElement.position().top +  45  + "px"
         });
 
         $("#gameFrame").append($newRocketSpan);
@@ -275,11 +300,11 @@ var Rocket = function() {
             var delta = currentTimestamp - oldTimestamp;
 
 
-            if (delta > that.speed) {
+            if (delta > 30) {
 
                 // check if rocket is out of screen
                 if($newRocketSpan.position().left + 15 < window.innerWidth) {
-                    $newRocketSpan.css("left",  $newRocketSpan.position().left + 15 + "px");
+                    $newRocketSpan.css("left",  $newRocketSpan.position().left + that.speed + "px");
                 }
                 else {
                     that.isMoving = false;
@@ -328,7 +353,7 @@ var Minigun = function(gunPosition) {
 
         var $newBulletSpan = $("<span class='bullet'></span>");
         $newBulletSpan.css({
-            left: this.playerShip.htmlElement.position().left + 40 +"px",
+            left: this.playerShip.htmlElement.position().left + 80 +"px",
             top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
         });
         $("#gameFrame").append($newBulletSpan);

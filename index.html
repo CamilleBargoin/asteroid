@@ -15,23 +15,38 @@
 </head>
 <body>
     <div id="mainContainer">
-    <div id="backgroundScroll2" class="horizontal_scrollFast">
+        <!--div id="backgroundScroll2" class="horizontal_scrollFast">
         </div>
         <div id="backgroundScroll" class="horizontal_scroll">
-        </div>
+        </div-->
         <div id="gameFrame">
+            <div id="menuBackground">
+                <div id="menuBackgroundParallax">
+                            
+                    <div id="menu">
+                        <div id="menuHeader">
+                            <h1>Asteroid rain</h1>
+                        </div>
+                        <div id="menuList">
+                            <ul>
+                                <li><a id="startGame">DEMARRER</a></li>
+                                <li><a id="showScores">SCORES</a></li>
+                                <li><a id="showResume">VOIR LE CV</a></li>
+                            </ul>
+                        </div>
+                        <div id="menuFooter">
+                        </div>
+                    </div>
+                </div>
+             </div>
             <div id="gameHud">
-                <span id="hud_livesIcon" class="hud_normal">LIVES:</span>
-                <span id="hud_lives" class="hud_normal"></span>
-                <span id="hud_rocketsIcon" class="hud_normal">ROCKETS:</span>
-                <span id="hud_rockets" class="hud_normal"></span>
-                <span id="startAsteroids">Start</span>
-                <span id="stopAsteroids">Stop</span>
-                <span id="rotate">Waouh!</span>
-                <span id="asteroidDestroyed"></span>
-
+                <img id="hud_lives_score"></img>
+                <img id="hud_pause"></img>
+                <span id="hud_menu"></span>
+                <span id="hud_start">Start</span>
+                <p id="scoreLeft"></p>
+                <p id="scoreRight"></p>
             </div>
-
         </div>
     </div>
 </body>

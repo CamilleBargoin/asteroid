@@ -8,6 +8,8 @@ var Asteroid = function(htmlElement) {
     var asteroidnimationRequestId = null;
     this.destroyed = false;
 
+    
+
     this.explosionAnimation = [{
         x: 0,
         y: 0,
@@ -60,7 +62,7 @@ var Asteroid = function(htmlElement) {
 
                 if(currentPos.left <= 0) {
                      that.isMoving = false;
-                     console.log("Asteroid leaves screen");
+                     console.log("Asteroid have left the screen");
                      that.die();
                 }
 
@@ -84,6 +86,11 @@ var Asteroid = function(htmlElement) {
     };
 
 
+    this.pause = function() {
+
+    };
+
+
     /**
      * [die description]
      * @return {[type]} [description]
@@ -103,6 +110,9 @@ var Asteroid = function(htmlElement) {
                 elements.asteroids.splice(i, 1);
             }
          }
+
+
+
     };
 
     this.explode = function() {
@@ -115,6 +125,7 @@ var Asteroid = function(htmlElement) {
 
         this.explodeAnimate(this, function() {
             that.die();
+            game.updateScore(100);
         });
     };
 
@@ -133,13 +144,39 @@ var Asteroid = function(htmlElement) {
 var AsteroidGenerator = function() {
     var generationIntervalId = null;
 
+    this.types = [
+    {
+        width: 180,
+        height: 150,
+        filename: "asteroid_01.png"
+    },
+    {
+        width: 156,
+        height: 129,
+        filename: "asteroid_02.png"
+    },
+    {
+        width: 120,
+        height: 100,
+        filename: "asteroid_07.png"
+    }];
+
     this.start = function() {
+        var that = this;
+
         generationIntervalId = setInterval(function() {
 
             var $asteroidSpan = $("<span></span>");
             $asteroidSpan.addClass("asteroid");
 
+            var random = Math.floor(Math.random() * 3);
+            var asteroidData =  that.types[random];
+
+
             $asteroidSpan.css({
+                width: asteroidData.width,
+                height: asteroidData.height,
+                background: "url('./img/asteroids/" + asteroidData.filename + "')",
                 left: window.innerWidth + "px",
                 top: (Math.random() * window.innerHeight - 100) + 100 + "px"
             });
@@ -152,7 +189,7 @@ var AsteroidGenerator = function() {
 
             elements.asteroids.push(newAsteroid);
 
-        }, 600);
+        }, 1000);
 
     };
 

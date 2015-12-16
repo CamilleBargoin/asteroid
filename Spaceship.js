@@ -21,7 +21,6 @@ var Spaceship = function(htmlElement) {
         miniguns: []
     };
 
-
     /**
      * [moveRight description]
      * @return {[type]} [description]
@@ -251,13 +250,13 @@ var Spaceship = function(htmlElement) {
 
         var positionY = 0;
         function animateSprite() {
- 
+
             $(".spaceshipFlame").css("backgroundPosition",  '0px ' + positionY + "px");
             positionY += 30;
-             
-            ti = setTimeout(animateSprite, 80);    
+
+            ti = setTimeout(animateSprite, 80);
         }
-             
+
         animateSprite();
     };
 
@@ -300,7 +299,7 @@ var Rocket = function() {
             var delta = currentTimestamp - oldTimestamp;
 
 
-            if (delta > 30) {
+            if (delta > 30 && game.isPaused == false) {
 
                 // check if rocket is out of screen
                 if($newRocketSpan.position().left + 15 < window.innerWidth) {
@@ -316,7 +315,7 @@ var Rocket = function() {
                 var asteroidHit = that.checkCollision( elements.asteroids);
 
                 if (asteroidHit) {
-                    asteroidHit.explode();
+                    asteroidHit.damage(that.power);
                     that.isMoving = false;
                     if ($newRocketSpan)
                         $newRocketSpan.remove();
@@ -371,7 +370,7 @@ var Minigun = function(gunPosition) {
             oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
             var delta = currentTimestamp - oldTimestamp;
 
-            if (delta > that.speed) {
+            if (delta > that.speed && game.isPaused == false) {
 
 
                 if($newBulletSpan.position().left + 15 < window.innerWidth) {
@@ -383,7 +382,7 @@ var Minigun = function(gunPosition) {
                         $newBulletSpan.remove();
                 }
 
-                /*var asteroidHit = that.checkCollision(elements.asteroids, $newBulletSpan);
+                var asteroidHit = that.checkCollision(elements.asteroids, $newBulletSpan);
 
                 if (asteroidHit) {
 
@@ -391,7 +390,7 @@ var Minigun = function(gunPosition) {
                     if ($newBulletSpan)
                         $newBulletSpan.remove();
                     $newBulletSpan.isMoving = false;
-                }*/
+                }
 
 
                oldTimestamp = currentTimestamp;

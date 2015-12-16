@@ -28,13 +28,14 @@ a {
 
 #backgroundScroll {
 
-	background: url("backgroundSuperLarge.jpg") repeat-y;
+	background: url("./img/other/backgroundSuperLarge.jpg") repeat-y;
 	position: absolute;
     top: 0;
     left: 0;
     z-index: 0;
     width: 100%;
     height: 100%;
+    display: none;
 
 }
 
@@ -49,13 +50,14 @@ a {
 }
 
 #backgroundScroll2 {
-	background: url("backgroundSuperLargeTransparent.png") repeat-y;
+	background: url("./img/other/backgroundSuperLargeTransparent.png") repeat-y;
 	position: absolute;
     top: 0;
     left: 0;
     z-index: 1;
     width: 100%;
     height: 100%;
+    display: none;
 }
 
 .horizontal_scrollFast {
@@ -87,7 +89,7 @@ a {
 	margin: 0 auto;
 	padding: 0;
 	display: table;
-	
+
 	overflow: hidden;
 }
 
@@ -406,7 +408,7 @@ a {
 	top: 35%;
 	left: 20%;
 	z-index: 99;
-	color: white;
+	color: #ff8400;
 	font-family: consolas;
 	font-size: 100px;
 	font-weight: bold;

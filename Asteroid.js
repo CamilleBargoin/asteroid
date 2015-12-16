@@ -8,7 +8,7 @@ var Asteroid = function(htmlElement) {
     var asteroidnimationRequestId = null;
     this.destroyed = false;
 
-    
+
 
     this.explosionAnimation = [{
         x: 0,
@@ -50,14 +50,20 @@ var Asteroid = function(htmlElement) {
         var oldTimestamp;
         this.isMoving = true;
 
+
+
         var animate = function(currentTimestamp) {
 
             oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
             var delta = currentTimestamp - oldTimestamp;
 
-            if (delta > 30 && that.isMoving) {
+            if (delta > 30 && game.isPaused == false) {
 
                 var currentPos = that.htmlElement.position();
+
+
+
+
                 that.htmlElement.css("left", (currentPos.left - 10) + "px");
 
                 if(currentPos.left <= 0) {
@@ -148,17 +154,20 @@ var AsteroidGenerator = function() {
     {
         width: 180,
         height: 150,
-        filename: "asteroid_01.png"
+        filename: "asteroid_01.png",
+        health: 200
     },
     {
         width: 156,
         height: 129,
-        filename: "asteroid_02.png"
+        filename: "asteroid_02.png",
+        health: 100
     },
     {
         width: 120,
         height: 100,
-        filename: "asteroid_07.png"
+        filename: "asteroid_07.png",
+        health: 40
     }];
 
     this.start = function() {
@@ -184,6 +193,12 @@ var AsteroidGenerator = function() {
             $("#gameFrame").append($asteroidSpan);
 
             var newAsteroid = new Asteroid($asteroidSpan);
+
+
+
+            newAsteroid.health = asteroidData.health;
+
+            console.log(newAsteroid.health);
 
             newAsteroid.move();
 

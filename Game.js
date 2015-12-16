@@ -18,10 +18,11 @@ var Game = function() {
     var that = this;
     var score = 0;
 
+
     this.isPaused = false;
 
     this.init = function() {
-        
+
        this.mainMenu();
 
     };
@@ -39,7 +40,7 @@ var Game = function() {
             var el = $(this);
             setTimeout(function() {
                 el.css("background-image", "url('./img/gui/main_button_1_selected.png')");
-            }, 200);
+            }, 100);
         });
 
         $("ul li").mouseleave(function() {
@@ -59,8 +60,14 @@ var Game = function() {
             amountMovedX = (e.pageX * -1 / 6);
             amountMovedY = (e.pageY * -1 / 6);
             $("#menuBackgroundParallax").css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
-        
+
         });
+
+
+
+        var boss = new Boss();
+        boss.generateHtml();
+        boss.move();
     };
 
 
@@ -87,14 +94,31 @@ var Game = function() {
 
         playerShip.displayInfo();
 
-        
+
         $("#hud_lives").html(playerShip.getLives());
         $("#hud_rockets").html(playerShip.weapons.rockets.length);
 
-        
+
         $("#scoreLeft").html();
         $("#scoreRight").html(score);
-        //counterElement.addEventListener("DOMSubtreeModified", this.displayKillCount());
+
+
+
+
+
+        $("#menuBackground").fadeOut('fast', function() {
+        });
+
+        $("#backgroundScroll2").fadeIn('fast', function() {
+
+        });
+
+        $("#backgroundScroll").fadeIn('fast', function() {
+
+        });
+
+
+
 
 
         //
@@ -103,10 +127,12 @@ var Game = function() {
         $("#hud_start").click(function(event) {
             //bonusGenerator = new BonusGenerator();
             //bonusGenerator.start();
-            
+
             $playerSpan.fadeIn("fast", function() {
-                
             });
+
+
+            game.turnOnArrows();
 
             playerShip.showFlame();
             asteroidGenerator = new AsteroidGenerator();
@@ -122,38 +148,12 @@ var Game = function() {
         /**
          *  PAUSE METHOD
          */
-        $("#hud_pause").click(function() {
-
-            if (that.isPaused) {
-
-                that.isPaused = false;
-
-                for(var i = 0; i < elements.asteroids.length; i++) {
-                    elements.asteroids[i].isMoving= true;
-                    elements.asteroids[i].move();
-                }
-                asteroidGenerator.start();
-
-                that.turnOnArrows();
-
-            }
-            else {
-
-                that.isPaused = true;
-                for(var i = 0; i < elements.asteroids.length; i++) {
-                    elements.asteroids[i].isMoving = false;
-                }
-                asteroidGenerator.stop();
-
-                that.turnOffArrows();
-            }
-
-        });
+        $("#hud_pause").click(that.togglePause);
 
 
         /**
          *  SHOW MENU METHOD
-         */ 
+         */
         $("#hud_menu").click(that.backToMenu);
 
 
@@ -169,11 +169,37 @@ var Game = function() {
         // Init game by hiding the main menu and showing game hud
         $("#menu").fadeOut("slow", function(){
             $("#gameHud").fadeIn("fast");
-            
+
         });
-        
+
     };
 
+
+    this.togglePause = function() {
+        if (that.isPaused) {
+
+                that.isPaused = false;
+
+                for(var i = 0; i < elements.asteroids.length; i++) {
+                    elements.asteroids[i].isMoving= true;
+                    elements.asteroids[i].move();
+                }
+                asteroidGenerator.start();
+
+                that.turnOnArrows();
+
+            }
+            else {
+
+                that.isPaused = true;
+                /*
+                for(var i = 0; i < elements.asteroids.length; i++) {
+                    elements.asteroids[i].isMoving = false;
+                }*/
+                asteroidGenerator.stop();
+                that.turnOffArrows();
+            }
+    };
 
 
     this.turnOnArrows = function() {
@@ -268,18 +294,23 @@ var Game = function() {
 
 
     this.displayKillCount = function() {
-        if (parseInt(this.innerHTML)%10 === 0) {
 
+                var displayKillcountContainer = $("<div class='displayBonusContainer'></div>");
+                displayKillcountContainer.text((score + " Points !").toUpperCase());
+                displayKillcountContainer.css("display", "none");
+                $("body").append(displayKillcountContainer);
+                displayKillcountContainer.fadeIn('fast', function() {
+                    setTimeout(function() {
+                        displayKillcountContainer.fadeOut('fast', function() {
+                            displayKillcountContainer.remove();
+                        });
 
-                var displayKillcountContainer = window.document.createElement("div");
-                displayKillcountContainer.className = "displayBonusContainer";
-                displayKillcountContainer.innerHTML = (this.innerHTML + " asteroids destroyed !").toUpperCase();
-                window.document.body.appendChild(displayKillcountContainer);
-
-                setTimeout(function() {
-                     window.document.body.removeChild(displayKillcountContainer);
                  }, 1000);
-            }
+                });
+
+
+
+
     };
 
     this.rotateGame = function() {
@@ -306,13 +337,13 @@ var Game = function() {
     };
 
     this.showScores = function() {
-        
+
        alert("under construction");
     };
 
 
     this.showResume = function() {
-    
+
                alert("under construction");
     };
 
@@ -332,6 +363,10 @@ var Game = function() {
             scoreRight = "00" + scoreRight;
 
         $("#scoreRight").html(scoreRight);
+
+
+        if (score%500 == 0)
+            this.displayKillCount();
     };
 
 
@@ -351,5 +386,5 @@ $(document).ready(function() {
     Asteroid.prototype = new Utils();
 
     game = new Game();
-    game.turnOnArrows();
+
 });

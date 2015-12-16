@@ -1,8 +1,8 @@
 var Utils = function() {
 
-    this.checkCollision = function(elements) {
+    this.checkCollision = function(elements, source) {
 
-        var sourcePos = this.getPosition();
+        var sourcePos = (source) ? this.getPosition(source) : this.getPosition();
 
         for (var i = 0; i < elements.length; i++)
         {
@@ -15,12 +15,14 @@ var Utils = function() {
         return false;
     };
 
-    this.getPosition = function() {
+    this.getPosition = function(source) {
+
+        var element = (source) ? source : this.htmlElement;
 
         var pos, width, height;
-        pos = this.htmlElement.position();
-        width = this.htmlElement.width();
-        height = this.htmlElement.height();
+        pos = element.position();
+        width = element.width();
+        height = element.height();
         return [ [ pos.left, pos.left + width ], [ pos.top, pos.top + height ] ];
     };
 
@@ -31,8 +33,6 @@ var Utils = function() {
         r2 = p1[0] < p2[0] ? p2 : p1;
         return r1[1] > r2[0] || r1[0] === r2[0];
     };
-
-
 
 
     this.explodeAnimate = function(object, callback) {

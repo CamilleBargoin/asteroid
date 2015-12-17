@@ -1,15 +1,12 @@
 
-var playerShip, asteroidGenerator, bonusGenerator = null;
-var asteroids = [];
+var asteroidGenerator, bonusGenerator = null;
 var elements = {
     spaceships: [],
     asteroids: [],
     bonuses: []
 };
-var intervalID = null;
+
 var moveRightAnimationId, moveLeftAnimationId,  moveUpAnimationId,  moveDownAnimationId = null;
-var fireMinigunAnimationId = null;
-var intervalFireID = null;
 var game = null;
 
 
@@ -18,24 +15,29 @@ var Game = function() {
     var that = this;
     var score = 0;
 
-
+    this.playerShip = null;
     this.isPaused = false;
 
+    /**
+     * Entry door / initialisation of the game
+     */
     this.init = function() {
-
        this.mainMenu();
-
     };
 
-
+    /**
+     * Display the main menu of the game
+     */
     this.mainMenu = function() {
 
+        // click events
         $("#startGame").click(this.start);
         $("#showScores").click(this.showScores);
         $("#showResume").click(this.showResume);
 
 
 
+        // selection effect over the menu entry
         $("ul li").mouseenter(function() {
             var el = $(this);
             setTimeout(function() {
@@ -52,7 +54,9 @@ var Game = function() {
 
 
 
+        // parallax effect for the background
         $("#menuBackground").mousemove(function(e) {
+
             var amountMovedX = (e.pageX * -1 / 20);
             var amountMovedY = (e.pageY * -1 / 20);
             $(this).css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
@@ -60,120 +64,87 @@ var Game = function() {
             amountMovedX = (e.pageX * -1 / 6);
             amountMovedY = (e.pageY * -1 / 6);
             $("#menuBackgroundParallax").css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
-
         });
-
-
-/*
-        var boss = new Boss();
-        boss.generateHtml();
-        boss.move();
-        */
     };
 
 
 
-
+    /**
+     * Launches the game
+     *     - hides the main menu
+     *     - displays the game interface (hud)
+     *     - instanciates a new Spaceship Object
+     */
     this.start = function() {
- 
-        that.displayMessage("7500 Points !");
 
-        var $playerSpan = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
 
-        $("#gameFrame").append($playerSpan);
-        $playerSpan.hide();
 
-        playerShip = new Spaceship($playerSpan);
-        elements.spaceships.push(playerShip);
+
+
+        // creates a new Spaceship Object and adds it to the DOM
+        that.playerShip = new Spacehip();
+        that.playerShip.generateHtml();
+        $("#spaceship").hide();
+        elements.spaceships.push(that.playerShip);
 
 
         // Starting weapons
-        playerShip.weapons.rockets.push(new Rocket());
-        playerShip.weapons.rockets.push(new Rocket());
-        playerShip.weapons.rockets.push(new Rocket());
-        playerShip.weapons.miniguns.push(new Minigun(17));
-        playerShip.weapons.miniguns.push(new Minigun(91));
+        that.playerShip.weapons.rockets.push(new Rocket());
+        that.playerShip.weapons.rockets.push(new Rocket());
+        that.playerShip.weapons.rockets.push(new Rocket());
+        that.playerShip.weapons.miniguns.push(new Minigun(17));
+        that.playerShip.weapons.miniguns.push(new Minigun(91));
 
-        playerShip.displayInfo();
+        that.playerShip.displayInfo();
 
 
-
-        $("#health").prepend(playerShip.getHealth());
-
+        // displays basic info on interface (health and score)
+        $("#health").prepend(that.playerShip.getHealth());
         $("#scoreLeft").html();
         $("#scoreRight").html(score);
-
-
-
-        $("#menuBackground").fadeOut('fast', function() {
-        });
-
-        $("#backgroundScroll2").fadeIn('fast', function() {
-
-        });
-
-        $("#backgroundScroll").fadeIn('fast', function() {
-
-        });
-
-
-
 
 
         //
         // Buttons Click Events
         //
+
+        // Starts the game. instanceiates the AsteroidGenerator and activates keyboard
         $("#hud_start").click(function(event) {
             //bonusGenerator = new BonusGenerator();
             //bonusGenerator.start();
 
-            $playerSpan.fadeIn("fast", function() {
-            });
-
-
             game.turnOnArrows();
 
-            playerShip.showFlame();
+            that.playerShip.showFlame();
             asteroidGenerator = new AsteroidGenerator();
             asteroidGenerator.start();
         });
 
-
-        $("#stopAsteroids").click(function() {
-            asteroidGenerator.stop();
-        });
-
-
-        /**
-         *  PAUSE METHOD
-         */
+        // Pauses the game
         $("#hud_pause").click(that.togglePause);
 
 
-        /**
-         *  SHOW MENU METHOD
-         */
+
+        // Displays main menu
         $("#hud_menu").click(that.backToMenu);
 
 
-        /**
-         * [description]
-         */
-        $("#hud_rocketsIcon").click(function(event) {
-            playerShip.addMoreRockets();
-        });
 
 
+        // hides main menu and displays game background and interface
+        $("#menuBackground").fadeOut('fast');
+        $("#backgroundScroll2").fadeIn('fast');
+        $("#backgroundScroll").fadeIn('fast');
 
-        // Init game by hiding the main menu and showing game hud
         $("#menu").fadeOut("slow", function(){
             $("#gameHud").fadeIn("fast");
-
+            $("#spaceship").fadeIn("fast");
         });
-
     };
 
-
+    /**
+     * Pauses / unpauses the game
+     */
     this.togglePause = function() {
         if (that.isPaused) {
 
@@ -189,7 +160,6 @@ var Game = function() {
 
                 $("#backgroundScroll").addClass("horizontal_scroll");
                 $("#backgroundScroll2").addClass("horizontal_scrollFast");
-
             }
             else {
 
@@ -200,28 +170,37 @@ var Game = function() {
 
                 $("#backgroundScroll").removeClass("horizontal_scroll");
                 $("#backgroundScroll2").removeClass("horizontal_scrollFast");
-
-
             }
     };
 
 
+    /**
+     * Activates the keyboard
+     */
     this.turnOnArrows = function() {
         $(window).keydown(this.keydownListener);
         $(window).keyup(this.keyupListener);
     };
 
+
+    /**
+     * Deactivates the kayboard
+     */
     this.turnOffArrows = function() {
         $(window).off("keydown");
         $(window).off("keyup");
     };
 
+
+    /**
+     * Hides the game interface and calls the mainMenu method
+     */
     this.backToMenu = function() {
         $("#gameHud").fadeOut("slow", function() {
             $("#menu").fadeIn("fast");
         });
-        $("#spacecraft").fadeOut("slow", function() {
-            $playerSpan.remove();
+        $("#spaceship").fadeOut("slow", function() {
+            $("#spaceship").remove();
         });
 
         that.mainMenu();
@@ -231,25 +210,25 @@ var Game = function() {
     this.keydownListener = function(e) {
 
         if (e.keyCode == 39 || e.keyCode == 68) {
-            playerShip.moveRight();
+            that.playerShip.moveRight();
         }
         if (e.keyCode == 37 || e.keyCode == 81) {
-            playerShip.moveLeft();
+            that.playerShip.moveLeft();
         }
 
         if (e.keyCode == 38 || e.keyCode == 90) {
-            playerShip.moveUp();
+            that.playerShip.moveUp();
         }
         if (e.keyCode == 40 || e.keyCode == 83) {
-           playerShip.moveDown();
+           that.playerShip.moveDown();
         }
 
         if (e.keyCode == 32) {
-           playerShip.fireMiniguns();
+           that.playerShip.fireMiniguns();
         }
 
         if (e.keyCode == 13 || e.keyCode == 69) {
-           playerShip.shootRocket();
+           that.playerShip.shootRocket();
         }
 
         if (e.keyCode == 27) {
@@ -263,26 +242,26 @@ var Game = function() {
         $(".spaceshipFlame").css("left", "-23px");
 
         if (e.keyCode == 39 || e.keyCode == 68) {
-            playerShip.isMovingRight = false;
+            that.playerShip.isMovingRight = false;
 
            window.cancelAnimationFrame(moveRightAnimationId);
            moveRightAnimationId = null;
         }
         if (e.keyCode == 37 || e.keyCode == 81) {
-            playerShip.isMovingLeft = false;
+            that.playerShip.isMovingLeft = false;
 
            window.cancelAnimationFrame(moveLeftAnimationId);
            moveLeftAnimationId = null;
         }
 
         if (e.keyCode == 38 || e.keyCode == 90) {
-            playerShip.isMovingUp = false;
+            that.playerShip.isMovingUp = false;
 
             window.cancelAnimationFrame(moveUpAnimationId);
             moveUpAnimationId = null;
         }
         if (e.keyCode == 40 || e.keyCode == 83) {
-            playerShip.isMovingDown = false;
+            that.playerShip.isMovingDown = false;
 
             window.cancelAnimationFrame(moveDownAnimationId);
             moveDownAnimationId = null;
@@ -291,38 +270,21 @@ var Game = function() {
 
         if (e.keyCode == 32) {
             clearInterval(intervalFireID)  ;  //
-            playerShip.isFiring = false;
+            that.playerShip.isFiring = false;
         }
 
     };
 
-
-    this.displayKillCount = function() {
-/*
-        var displayKillcountContainer = $("<div class='displayBonusContainer'></div>");
-        displayKillcountContainer.text((score + " Points !").toUpperCase());
-        displayKillcountContainer.css("display", "none");
-        $("body").append(displayKillcountContainer);
-        displayKillcountContainer.fadeIn('fast', function() {
-            setTimeout(function() {
-                displayKillcountContainer.fadeOut('fast', function() {
-                    displayKillcountContainer.remove();
-                });
-
-         }, 1000);
-        });
-*/
-
-        this.displayMessage(score + " Points !");
-
-    };
-
-
+    /**
+     * Displays a message box on the screen
+     */
     this.displayMessage = function(message) {
         $("#hud_message").text(message);
         $("#hud_messageContainer").fadeToggle("fast").delay(2000).fadeToggle("fast");
 
     };
+
+
 
     this.rotateGame = function() {
 
@@ -334,7 +296,7 @@ var Game = function() {
             $("#backgroundScroll2").removeClass('horizontal_scrollFast');
             $("#backgroundScroll2").addClass('vertical_scrollFast');
 
-            playerShip.rotate();
+            that.playerShip.rotate();
         }
         else{
             $("#backgroundScroll").addClass('horizontal_scroll');
@@ -347,6 +309,8 @@ var Game = function() {
         }
     };
 
+
+
     this.showScores = function() {
 
        alert("under construction");
@@ -355,10 +319,13 @@ var Game = function() {
 
     this.showResume = function() {
 
-               alert("under construction");
+        alert("under construction");
     };
 
 
+    /**
+     * Updates the scores displayed with a new value
+     */
     this.updateScore = function(newScore) {
 
         score += newScore;
@@ -377,9 +344,8 @@ var Game = function() {
 
 
         if (score%500 == 0)
-            this.displayKillCount();
+           this.displayMessage(score + " Points !");
     };
-
 
 
 

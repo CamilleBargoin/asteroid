@@ -1,5 +1,6 @@
 /**
- * [Spaceship description]
+ * Spaceship Object controlled by the player
+ * A Spaceship can move and fire different weapons
  */
 var Spaceship = function(htmlElement) {
 
@@ -7,25 +8,30 @@ var Spaceship = function(htmlElement) {
         top: 500,
         left: 800
     };
-
-    var lives = 5;
-
     var health = 100;
 
-    this.htmlElement = htmlElement;
+    this.htmlElement = null;
     this.isMovingRight = false;
     this.isMovingLeft = false;
     this.isMovingUp = false;
     this.isMovingDown = false;
     this.isFiring = false;
+
     this.weapons = {
         rockets: [],
         miniguns: []
     };
 
     /**
-     * [moveRight description]
-     * @return {[type]} [description]
+     * Generates the html code for
+     */
+    this.generateHtml = function() {
+        this.htmlElement = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
+        $("#gameFrame").append(this.htmlElement);
+    };
+
+    /**
+     * Animates the spaceship to the right
      */
     this.moveRight = function() {
         if (!this.isMovingRight) {
@@ -49,13 +55,11 @@ var Spaceship = function(htmlElement) {
             };
             moveRightAnimationId = window.requestAnimationFrame(animate);
         }
-
     };
 
 
     /**
-     * [moveLeft description]
-     * @return {[type]} [description]
+     * Animates the spaceship to the left
      */
     this.moveLeft = function() {
         if (!this.isMovingLeft) {
@@ -82,8 +86,7 @@ var Spaceship = function(htmlElement) {
 
 
     /**
-     * [moveUp description]
-     * @return {[type]} [description]
+     * Animates the spaceship to the top
      */
     this.moveUp = function() {
         if (!this.isMovingUp) {
@@ -108,8 +111,7 @@ var Spaceship = function(htmlElement) {
 
 
     /**
-     * [moveDown description]
-     * @return {[type]} [description]
+     * Animates the spaceship to the bottom
      */
     this.moveDown = function() {
 
@@ -134,15 +136,8 @@ var Spaceship = function(htmlElement) {
     };
 
 
-    this.rotate = function() {
-
-           // this.htmlElement.addClass('rotateUp');
-
-    };
-
     /**
      * [shootRocket description]
-     * @return {[type]} [description]
      */
     this.shootRocket = function() {
 
@@ -180,19 +175,25 @@ var Spaceship = function(htmlElement) {
 
 
 
-
+    /**
+     * Returns Spaceship health value
+     */
     this.getHealth = function() {
         return health;
     };
 
 
+    /**
+     * Updates Spaceship health value and displays it on the game interface
+     * the css class changes whren under 25
+     * if health gets to 0, the Spaceship dies
+     */
     this.updateHealth = function(modifier) {
         health += modifier;
 
-        
         if (health < 100)
             $("#health").addClass("notFull");
-        else 
+        else
              $("#health").removeClass("notFull");
 
 
@@ -202,14 +203,12 @@ var Spaceship = function(htmlElement) {
             $("#health").removeClass("danger");
 
         $("#health").html(health + "<sup>%</sup>");
-        
 
 
         if (health <= 0){
             this.die();
             game.pause();
         }
-
     };
 
 
@@ -227,13 +226,11 @@ var Spaceship = function(htmlElement) {
 
 
     /**
-     * [die description]
-     * @return {[type]} [description]
+     * UNDER CONTRUCTION
      */
     this.die = function() {
         alert("AAAaaaaarrrrrggghhhh !!!");
     };
-
 
     this.addMoreRockets = function () {
         this.weapons.rockets.push(new Rocket());
@@ -242,11 +239,13 @@ var Spaceship = function(htmlElement) {
 
     this.damage = function() {
         this.updateHealth(-25);
-
         this.blink(3, 140);
     };
 
 
+    /**
+     * Animates the Spaceship flames
+     */
     this.showFlame = function() {
         var $flameLeft = $("<span class='spaceshipFlame'></span>");
         $flameLeft.css("top", "11px");
@@ -280,8 +279,6 @@ var Rocket = function() {
 
     this.speed = 8;
     this.power = 100;
-
-    this.playerShip = playerShip;
     this.isMoving = false;
     var playerCraftPos = null;
 
@@ -291,8 +288,8 @@ var Rocket = function() {
 
         var $newRocketSpan = $("<span class='rocket'></span>");
         $newRocketSpan.css({
-            left: this.playerShip.htmlElement.position().left + 105 +"px",
-            top: this.playerShip.htmlElement.position().top +  45  + "px"
+            left: game.playerShip.htmlElement.position().left + 105 +"px",
+            top: game.playerShip.htmlElement.position().top +  45  + "px"
         });
 
         $("#gameFrame").append($newRocketSpan);
@@ -331,9 +328,7 @@ var Rocket = function() {
                     console.log("Asteroid Hit !");
                 }
 
-
                 oldTimestamp = currentTimestamp;
-
             }
 
             if (that.isMoving)
@@ -353,7 +348,6 @@ var Rocket = function() {
 var Minigun = function(gunPosition) {
     this.speed = 20;
     this.power = 8;
-    this.playerShip = playerShip;
     this.gunPosition = gunPosition;
     var playerCraftPos = null;
 
@@ -361,8 +355,8 @@ var Minigun = function(gunPosition) {
 
         var $newBulletSpan = $("<span class='bullet'></span>");
         $newBulletSpan.css({
-            left: this.playerShip.htmlElement.position().left + 80 +"px",
-            top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
+            left: game.playerShip.htmlElement.position().left + 80 +"px",
+            top: game.playerShip.htmlElement.position().top + this.gunPosition  + "px"
         });
         $("#gameFrame").append($newBulletSpan);
 

@@ -39,11 +39,13 @@ var Boss = function() {
                 var step = 10;
 
                 if(movingUp) {
+                    step = -10;
                     if (currentPos.top <= 5) {
                         movingUp = false;
                         step = 10;
                     }
                 } else {
+                    step = 10;
                     if (currentPos.top >= (window.innerHeight - 155)) {
 
                         movingUp = true;

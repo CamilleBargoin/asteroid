@@ -204,6 +204,8 @@ a {
 	top: 0;
 	left: 0;
 	background-image: url("./img/gui/hud_lives_score.png");
+	margin: 0;
+	padding: 0;
 }
 
 #hud_menu {
@@ -261,12 +263,37 @@ a {
 	color: #aaaaaa;
 }
 
-/*
-#gameHud span {
-	font-family: consolas;
-	line-height: 70px;
-	padding: 5px;
-}*/
+#hud_messageContainer {
+	width: 100%;
+	height: 146px;
+	bottom: 5%;
+	position: absolute;
+	display: none;
+	z-index: 50;
+}
+
+#hud_messageBackground {
+	position: relative;
+	background: url("./img/gui/hud_message.png");
+	height: 146px;
+	width: 459px;
+	margin: 0 auto;
+}
+
+#hud_message {
+	position: absolute; 
+   	top: 36px; 
+   	left: 119px; 
+   	width: 292px; 
+   	height: 84px;
+	text-align: center;
+	line-height: 84px;
+	font-family: "Neuropol";
+	font-size: 32px;
+	color: white;
+	padding: 0;
+	margin: 0;
+}
 
 
 .rocket {
@@ -352,6 +379,38 @@ a {
 	width: 98px;
 	padding: 0;
 	margin: 0;
+}
+
+#health {
+	color: #ff8400;
+	font-family: "Planer";
+	position: absolute;
+	top: 49px;
+	left: 61px;
+	margin: 0;
+	padding: 0;
+	width: 95px;
+	height: 95px;
+	text-align: center;
+	line-height: 95px;
+	font-weight: bold;
+	font-size: 49px
+}
+
+#health sup {
+	font-size: 25px;
+}
+
+.fullHealth {
+	font-size: 49px;
+}
+
+#health.notFull {
+	font-size: 55px;
+}
+
+#health.danger {
+	color: #ff3600;
 }
 
 

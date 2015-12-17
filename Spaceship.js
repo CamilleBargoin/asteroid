@@ -10,6 +10,8 @@ var Spaceship = function(htmlElement) {
 
     var lives = 5;
 
+    var health = 100;
+
     this.htmlElement = htmlElement;
     this.isMovingRight = false;
     this.isMovingLeft = false;
@@ -177,34 +179,39 @@ var Spaceship = function(htmlElement) {
     };
 
 
-    /**
-     * [getLives description]
-     * @return {[type]} [description]
-     */
-    this.getLives = function() {
-        return lives;
+
+
+    this.getHealth = function() {
+        return health;
     };
 
 
-    /**
-     * [setLives description]
-     * @param {[type]} modifier [description]
-     */
-    this.setLives = function(modifier) {
-        lives += modifier;
+    this.updateHealth = function(modifier) {
+        health += modifier;
 
-        $("#hud_lives").html(lives);
+        
+        if (health < 100)
+            $("#health").addClass("notFull");
+        else 
+             $("#health").removeClass("notFull");
 
-        if(lives <= 0) {
-            $("#hud_livesIcon").className = "hud_dead";
-            $("#hud_lives").className = "hud_dead";
+
+        if (health <= 25)
+            $("#health").addClass("danger");
+        else
+            $("#health").removeClass("danger");
+
+        $("#health").html(health + "<sup>%</sup>");
+        
+
+
+        if (health <= 0){
             this.die();
+            game.pause();
         }
-        else {
-            $("#hud_livesIcon").className = "hud_normal";
-            $("#hud_lives").className = "hud_normal";
-        }
+
     };
+
 
 
     /**
@@ -234,7 +241,9 @@ var Spaceship = function(htmlElement) {
     };
 
     this.damage = function() {
-        this.setLives(-1);
+        this.updateHealth(-25);
+
+        this.blink(3, 140);
     };
 
 

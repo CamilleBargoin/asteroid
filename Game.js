@@ -64,17 +64,19 @@ var Game = function() {
         });
 
 
-
+/*
         var boss = new Boss();
         boss.generateHtml();
         boss.move();
+        */
     };
 
 
 
 
     this.start = function() {
-
+ 
+        that.displayMessage("7500 Points !");
 
         var $playerSpan = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
 
@@ -95,14 +97,11 @@ var Game = function() {
         playerShip.displayInfo();
 
 
-        $("#hud_lives").html(playerShip.getLives());
-        $("#hud_rockets").html(playerShip.weapons.rockets.length);
 
+        $("#health").prepend(playerShip.getHealth());
 
         $("#scoreLeft").html();
         $("#scoreRight").html(score);
-
-
 
 
 
@@ -188,16 +187,21 @@ var Game = function() {
 
                 that.turnOnArrows();
 
+                $("#backgroundScroll").addClass("horizontal_scroll");
+                $("#backgroundScroll2").addClass("horizontal_scrollFast");
+
             }
             else {
 
                 that.isPaused = true;
-                /*
-                for(var i = 0; i < elements.asteroids.length; i++) {
-                    elements.asteroids[i].isMoving = false;
-                }*/
+
                 asteroidGenerator.stop();
                 that.turnOffArrows();
+
+                $("#backgroundScroll").removeClass("horizontal_scroll");
+                $("#backgroundScroll2").removeClass("horizontal_scrollFast");
+
+
             }
     };
 
@@ -294,22 +298,29 @@ var Game = function() {
 
 
     this.displayKillCount = function() {
-
-                var displayKillcountContainer = $("<div class='displayBonusContainer'></div>");
-                displayKillcountContainer.text((score + " Points !").toUpperCase());
-                displayKillcountContainer.css("display", "none");
-                $("body").append(displayKillcountContainer);
-                displayKillcountContainer.fadeIn('fast', function() {
-                    setTimeout(function() {
-                        displayKillcountContainer.fadeOut('fast', function() {
-                            displayKillcountContainer.remove();
-                        });
-
-                 }, 1000);
+/*
+        var displayKillcountContainer = $("<div class='displayBonusContainer'></div>");
+        displayKillcountContainer.text((score + " Points !").toUpperCase());
+        displayKillcountContainer.css("display", "none");
+        $("body").append(displayKillcountContainer);
+        displayKillcountContainer.fadeIn('fast', function() {
+            setTimeout(function() {
+                displayKillcountContainer.fadeOut('fast', function() {
+                    displayKillcountContainer.remove();
                 });
 
+         }, 1000);
+        });
+*/
+
+        this.displayMessage(score + " Points !");
+
+    };
 
 
+    this.displayMessage = function(message) {
+        $("#hud_message").text(message);
+        $("#hud_messageContainer").fadeToggle("fast").delay(2000).fadeToggle("fast");
 
     };
 

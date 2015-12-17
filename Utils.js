@@ -136,4 +136,16 @@ var Utils = function() {
 
     };
 
+
+
+    /**
+     * Purpose: blink a page element
+     * Preconditions: the element you want to apply the blink to, the number of times to blink the element (or -1 for infinite times), the speed of the blink
+     **/
+    this.blink = function(times, speed) {
+
+        for(var i = 0; i < times; i++) 
+            this.htmlElement.fadeOut(speed).fadeIn(speed);
+    };
+
 };

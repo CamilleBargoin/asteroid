@@ -25,6 +25,17 @@ var Game = function() {
 
        this.mainMenu();
 
+       $("#mainContainer").mousemove(function(e) {
+            var amountMovedX = (e.pageX * -1 / 20);
+            var amountMovedY = (e.pageY * -1 / 20);
+            $(this).css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
+
+            amountMovedX = (e.pageX * -1 / 6);
+            amountMovedY = (e.pageY * -1 / 6);
+            $("#backgroundParallax").css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
+
+        });
+
     };
 
 
@@ -36,14 +47,14 @@ var Game = function() {
 
 
 
-        $("ul li").mouseenter(function() {
+        $("#menuList ul li").mouseenter(function() {
             var el = $(this);
             setTimeout(function() {
                 el.css("background-image", "url('./img/gui/main_button_1_selected.png')");
             }, 100);
         });
 
-        $("ul li").mouseleave(function() {
+        $("#menuList ul li").mouseleave(function() {
             var el = $(this);
             setTimeout(function() {
                 el.css("background-image", "url('./img/gui/main_button_1.png')");
@@ -52,16 +63,7 @@ var Game = function() {
 
 
 
-        $("#menuBackground").mousemove(function(e) {
-            var amountMovedX = (e.pageX * -1 / 20);
-            var amountMovedY = (e.pageY * -1 / 20);
-            $(this).css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
-
-            amountMovedX = (e.pageX * -1 / 6);
-            amountMovedY = (e.pageY * -1 / 6);
-            $("#menuBackgroundParallax").css('background-position',  amountMovedX + 'px ' + amountMovedY + 'px');
-
-        });
+        
 
 
 /*
@@ -75,12 +77,17 @@ var Game = function() {
 
 
     this.start = function() {
- 
-        that.displayMessage("7500 Points !");
+
+        score = 0;
+
+        $("#transitionBlack").fadeIn(2500, function(){
+             $("#gameContainer").show();
+        }).fadeOut(2500);
+
 
         var $playerSpan = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
 
-        $("#gameFrame").append($playerSpan);
+        $("#gameContainer").append($playerSpan);
         $playerSpan.hide();
 
         playerShip = new Spaceship($playerSpan);
@@ -98,26 +105,13 @@ var Game = function() {
 
 
 
-        $("#health").prepend(playerShip.getHealth());
+        $("#health").html(playerShip.getHealth()).append("<sup>%</sup>");
 
         $("#scoreLeft").html();
         $("#scoreRight").html(score);
 
-
-
-        $("#menuBackground").fadeOut('fast', function() {
-        });
-
-        $("#backgroundScroll2").fadeIn('fast', function() {
-
-        });
-
-        $("#backgroundScroll").fadeIn('fast', function() {
-
-        });
-
-
-
+        $("#backgroundScroll2").fadeIn('fast');
+        $("#backgroundScroll").fadeIn('fast');
 
 
         //
@@ -164,13 +158,7 @@ var Game = function() {
         });
 
 
-
-        // Init game by hiding the main menu and showing game hud
-        $("#menu").fadeOut("slow", function(){
-            $("#gameHud").fadeIn("fast");
-
-        });
-
+        $("#gameHud").fadeIn("fast");
     };
 
 
@@ -183,25 +171,39 @@ var Game = function() {
                     elements.asteroids[i].isMoving= true;
                     elements.asteroids[i].move();
                 }
-                asteroidGenerator.start();
+
+                if (asteroidGenerator)
+                    asteroidGenerator.start();
 
                 that.turnOnArrows();
 
                 $("#backgroundScroll").addClass("horizontal_scroll");
                 $("#backgroundScroll2").addClass("horizontal_scrollFast");
 
+                $("#pauseContainer").hide();
+
             }
             else {
 
                 that.isPaused = true;
 
-                asteroidGenerator.stop();
+                if (asteroidGenerator)
+                    asteroidGenerator.stop();
                 that.turnOffArrows();
 
                 $("#backgroundScroll").removeClass("horizontal_scroll");
                 $("#backgroundScroll2").removeClass("horizontal_scrollFast");
 
+                $("#pauseContainer").show();
 
+                $("#pauseContainer li:nth-of-type(1) p, #pauseContainer li:nth-of-type(1) img").click(function(){
+                   that.togglePause();
+                });
+
+                $("#pauseContainer li:nth-of-type(2) p, #pauseContainer li:nth-of-type(2) img").click(function(){ 
+                    $("#pauseContainer").hide();
+                    that.backToMenu();
+                });
             }
     };
 
@@ -217,14 +219,10 @@ var Game = function() {
     };
 
     this.backToMenu = function() {
-        $("#gameHud").fadeOut("slow", function() {
-            $("#menu").fadeIn("fast");
-        });
-        $("#spacecraft").fadeOut("slow", function() {
-            $playerSpan.remove();
-        });
 
-        that.mainMenu();
+        $("#transitionBlack").fadeIn(2500, function(){
+             $("#gameContainer").hide();
+        }).fadeOut(2500);
     };
 
 
@@ -349,13 +347,74 @@ var Game = function() {
 
     this.showScores = function() {
 
-       alert("under construction");
+        $("#menu").fadeOut('fast', function() {
+            $("#scoreContainer").fadeIn('fast').css('display','table');
+        });
+
+
+        $(".backButton").click(function(){
+                $("#scoreContainer").fadeOut('fast', function() {
+                $("#menu").fadeIn('fast');
+            });
+        });
     };
 
 
     this.showResume = function() {
 
-               alert("under construction");
+               
+        $("#menu").fadeOut('fast', function() {
+            $("#resumeContainer").fadeIn('fast');
+        });
+
+
+        $(".backButton").click(function(){
+                $("#resumeContainer").fadeOut('fast', function() {
+                $("#menu").fadeIn('fast');
+            });
+        });
+
+        $("#downloadResume").click(function() {
+            alert("télécharger le CV");
+        });
+
+        $(".resumeCol:nth-of-type(1) img").mouseenter(function(){
+            $(".resumeTexts").hide();
+            $("#resumePersonalData").fadeIn('fast');
+        });
+
+        $(".resumeCol:nth-of-type(2) img").mouseenter(function(){
+            $(".resumeTexts").hide();
+            $("#resumeSkills").fadeIn('fast');
+        });
+
+        $(".resumeCol:nth-of-type(3) img").mouseenter(function(){
+            $(".resumeTexts").hide();
+            $("#resumeWorks").fadeIn('fast');
+        });
+
+        $(".resumeCol:nth-of-type(4) img").mouseenter(function(){
+            $(".resumeTexts").hide();
+            $("#resumeFormation").fadeIn('fast');
+        });
+
+
+        $("#resumePersonalData").mouseleave(function(){
+            $("#resumePersonalData").fadeOut('fast');
+        });
+
+        $("#resumeSkills").mouseleave(function(){
+            $("#resumeSkills").fadeOut('fast');
+        });
+
+        $("#resumeWorks").mouseleave(function(){
+            $("#resumeWorks").fadeOut('fast');
+        });
+
+        $("#resumeFormation").mouseleave(function(){
+            $("#resumeFormation").fadeOut('fast');
+        });
+
     };
 
 
@@ -390,6 +449,12 @@ var Game = function() {
 
 $(document).ready(function() {
 
+
+    var images = ['./img/backgrounds/background_menu.jpg', './img/backgrounds/background_menu2.jpg'];
+
+    $('#mainContainer').css({
+        background: 'url(' + images[Math.floor(Math.random() * images.length)] + ') center center'
+    });
 
     Spaceship.prototype = new Utils();
     Minigun.prototype = new Utils();

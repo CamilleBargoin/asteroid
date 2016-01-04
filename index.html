@@ -9,44 +9,186 @@
     <script></script>
 </head>
 <body>
-    <div id="mainContainer">
+    <div>
+        <div id="mainContainer">
+            <div id="transitionBlack"></div>
+            <div id="backgroundParallax">
 
-        <div id="gameFrame">
-            <div id="menuBackground">
-                <div id="menuBackgroundParallax">
-
-                    <div id="menu">
-                        <div id="menuHeader">
-                            <h1>Asteroid Shower</h1>
-                        </div>
-                        <div id="menuList">
-                            <ul>
-                                <li><a id="startGame">DEMARRER</a></li>
-                                <li><a id="showScores">SCORES</a></li>
-                                <li><a id="showResume">VOIR LE CV</a></li>
-                            </ul>
-                        </div>
-                        <div id="menuFooter">
-                        </div>
+                <div id="menu">
+                    <div id="menuHeader">
+                        <h1>Asteroid Shower</h1>
+                    </div>
+                    <div id="menuList">
+                        <ul>
+                            <li><a id="startGame">DEMARRER</a></li>
+                            <li><a id="showScores">SCORES</a></li>
+                            <li><a id="showResume">VOIR LE CV</a></li>
+                        </ul>
+                    </div>
+                    <div id="menuFooter">
                     </div>
                 </div>
-             </div>
-            <div id="gameHud">
-                <img id="hud_lives_score"></img>
-                <img id="hud_pause"></img>
-                <span id="hud_menu"></span>
-                <span id="hud_start">Start</span>
-                <p id="health" class="fullHealth"><sup>%</sup></p>
-                <p id="scoreLeft"></p>
-                <p id="scoreRight"></p>
-            </div>
-            <div id="hud_messageContainer">
-                <div id="hud_messageBackground" src=>
-                    <p id="hud_message"></p>
+
+                <div id="gameContainer">
+                    <div id="gameHud">
+                        <img id="hud_lives_score"></img>
+                        <div id="health_sprite"></div>
+                        <img id="hud_pause"></img>
+                        <span id="hud_menu"></span>
+                        <span id="hud_start">Start</span>
+                        <p id="health" class="fullHealth"><!--sup>%</sup--></p>
+                        <p id="scoreLeft"></p>
+                        <p id="scoreRight"></p>
+                    </div>
+                    <div id="pauseContainer">
+                        <ul>
+                            <li>
+                                <img src="./img/icons/icon_skill.png" alt="">
+                                <p>Reprendre</p>
+                            </li>
+                            <li>
+                                <img src="./img/icons/icon_skill.png" alt="">
+                                <p>Menu Principal</p>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <div id="hud_messageContainer">
+                        <div id="hud_messageBackground">
+                            <p id="hud_message"></p>
+                        </div>
+                    </div>
+                    <div id="backgroundScroll2" class="horizontal_scrollFast"></div>
+                    <div id="backgroundScroll" class="horizontal_scroll"></div>
+                </div>
+                <div id="scoreContainer">
+                    <div class="scoreSide">
+                        <div class="backButton"></div>
+                        <img src="./img/gui/button_arrow_left.png" alt="">
+                    </div>
+                    <div id="scoreBody">
+                        <div id="scoreBackground">
+                            <h1>MEILLEURS SCORES</h1>
+                           <table>
+                            <tbody>
+                                <tr>
+                                    <td><span class="scorePos">1</span></td><td class="scoreName">Dark Vador</td><td class="scoreNumber">986548</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="scorePos">2</span></td><td class="scoreName">Captain Flam</td><td class="scoreNumber">895425</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="scorePos">3</span></td><td class="scoreName">Albator</td><td class="scoreNumber">648752</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">4</span></td><td class="scoreName">Captain Kirk</td><td class="scoreNumber">648752</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">5</span></td><td class="scoreName">Chewbaca</td><td class="scoreNumber">648752</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">6</span></td><td class="scoreName">...</td><td class="scoreNumber">...</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">7</span></td><td class="scoreName">...</td><td class="scoreNumber">...</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">8</span></td><td class="scoreName">...</td><td class="scoreNumber">...</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">9</span></td><td class="scoreName">...</td><td class="scoreNumber">...</td>
+                                </tr>
+                                 <tr>
+                                    <td><span class="scorePos">10</span></td><td class="scoreName">...</td><td class="scoreNumber">...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        
+                    </div>
+                    <div class="scoreSide"></div>
+                        
+                    <div id="scoreFooter">
+                    </div>
+                </div>
+                <div id="resumeContainer">
+                    <div>
+                        <div id="resumeHeader">
+                            <div class="resumeSide">
+                                <div class="backButton"></div>
+                                <img src="./img/gui/button_arrow_left.png" alt="">
+                                <div id="downloadResume"></div>
+                            </div>
+                            <div id="resumeHeaderCenter">
+                                <img src="./img/gui/frame_top.png" alt="">
+                                <p>Camille Bargoin</p>
+                                <h1>Développeur Javascript Web & Mobile</h1>
+                            </div>
+                            <div class="resumeSide"></div>
+                        </div>
+                        <div id="resumeBody">
+                            <div class="resumeSide"></div>
+                            <div id="resumeBodyCenter">
+                                <div>
+                                    <div class="resumeCol">
+                                        <img src="./img/backgrounds/planet_1.png" alt="" class="hvr-wobble-to-bottom-right">
+                                        <p>Coordonnées</p>
+                                    </div>
+                                    <div class="resumeCol">
+                                        <img src="./img/backgrounds/planet_2.png" alt="skills" class="hvr-wobble-to-top-right"> 
+                                         <p>Compétences</p>
+                                    </div>
+                                    <div class="resumeCol">
+                                        <img src="./img/backgrounds/planet_3.png" alt="works" class="hvr-wobble-to-bottom-right">
+                                        <p>Expériences professionnelles</p>
+                                    </div>
+                                    <div class="resumeCol">
+                                        <img src="./img/backgrounds/planet_4.png" alt="formation" class="hvr-wobble-to-top-right">
+                                        <p>Formation</p>
+                                    </div>
+                                </div>
+
+                                <div id="resumePersonalData" class="resumeTexts">
+                                    <p>Camille Bargoin</p>
+                                    <p>29 ans</p>
+                                    <p>87 rue Saint Fargeau, 75020 Paris</p>
+                                    <p>+33 7 82 81 93 51</p>
+                                </div>
+                                <div id="resumeSkills" class="resumeTexts">
+                                    - Javascript<br/>
+                                    - HTML5 / CSS3<br/>
+                                    - Bootstrap<br/>
+                                    - jQuery<br/>
+                                    - Angular<br/>
+                                    - MongDB<br/>
+                                    - Node.js<br/>
+                                    - Express<br/>
+                                    - Meteor<br/>
+                                    - Titanium Mobile<br/>
+                                    - Conception / Publication Mobile<br/> 
+                                    - PHP / SQL<br/>
+                                    - Symfony 2<br/>
+                                </div>
+                                <div id="resumeWorks" class="resumeTexts">
+                                    - Responsable Projet Technique<br/>
+                                    - Développeur Mobile & Web
+                                </div>
+                                <div id="resumeFormation" class="resumeTexts">
+                                    - Intégrateur - Déevloppeur Web Javascript Fullstack<br/>
+                                    - Expert en Systèmes et Réseaux Informatiques (Niveau I)<br/>
+                                    - Bachelor Of Computer Science<br/>
+                                    - BTS Informatique de Gestion
+                                </div>
+                            </div>
+                            <div class="resumeSide"></div> 
+                        </div>
+                        <div id="resumeFooter">
+                           
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
-            <div id="backgroundScroll2" class="horizontal_scrollFast"></div>
-            <div id="backgroundScroll" class="horizontal_scroll"></div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

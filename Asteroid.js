@@ -190,7 +190,7 @@ var AsteroidGenerator = function() {
                 top: (Math.random() * window.innerHeight - 100) + 100 + "px"
             });
 
-            $("#gameFrame").append($asteroidSpan);
+            $("#gameContainer").append($asteroidSpan);
 
             var newAsteroid = new Asteroid($asteroidSpan);
 

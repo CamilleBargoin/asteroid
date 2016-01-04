@@ -190,12 +190,29 @@ var Spaceship = function(htmlElement) {
         health += modifier;
 
         
-        if (health < 100)
+        if (health < 100) {
             $("#health").addClass("notFull");
-        else 
-             $("#health").removeClass("notFull");
-
-
+            
+            if(health == 75)
+                $("#health_sprite").css({
+                    backgroundPosition: "-290px -145px" 
+                });
+            else if (health == 50)
+                $("#health_sprite").css({
+                    backgroundPosition: "-580px -290px" 
+                });
+            else if (health == 25)
+                $("#health_sprite").css({
+                    backgroundPosition: "-290px -580px" 
+                });
+        }
+        else {
+            $("#health").removeClass("notFull");
+            $("#health_sprite").css({
+                backgroundPosition: "0 0" 
+            });
+        }
+             
         if (health <= 25)
             $("#health").addClass("danger");
         else
@@ -204,12 +221,13 @@ var Spaceship = function(htmlElement) {
         $("#health").html(health + "<sup>%</sup>");
         
 
-
         if (health <= 0){
+            $("#health_sprite").css({
+                backgroundPosition: "-435px -725px" 
+            });
             this.die();
             game.pause();
         }
-
     };
 
 
@@ -295,7 +313,7 @@ var Rocket = function() {
             top: this.playerShip.htmlElement.position().top +  45  + "px"
         });
 
-        $("#gameFrame").append($newRocketSpan);
+        $("#gameContainer").append($newRocketSpan);
 
         this.htmlElement = $newRocketSpan;
 
@@ -364,7 +382,7 @@ var Minigun = function(gunPosition) {
             left: this.playerShip.htmlElement.position().left + 80 +"px",
             top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
         });
-        $("#gameFrame").append($newBulletSpan);
+        $("#gameContainer").append($newBulletSpan);
 
 
         this.htmlElement = $newBulletSpan;

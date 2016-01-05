@@ -12,6 +12,8 @@ var fireMinigunAnimationId = null;
 var intervalFireID = null;
 var game = null;
 
+var skills = 0;
+
 
 var Game = function() {
 
@@ -63,7 +65,7 @@ var Game = function() {
 
 
 
-        
+
 
 
 /*
@@ -82,7 +84,7 @@ var Game = function() {
 
         $("#transitionBlack").fadeIn(2500, function(){
              $("#gameContainer").show();
-        }).fadeOut(2500);
+        }).fadeOut(2000);
 
 
         var $playerSpan = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
@@ -158,53 +160,89 @@ var Game = function() {
         });
 
 
+
+        /**
+         * Pzuse Menu click events
+         */
+        $("#pauseContainer li:nth-of-type(1) p, #pauseContainer li:nth-of-type(1) img").click(function(){
+               that.togglePause();
+            });
+
+        $("#pauseContainer li:nth-of-type(2) p, #pauseContainer li:nth-of-type(2) img").click(function(){
+            $("#pauseContainer").hide();
+            that.backToMenu();
+        });
+
+
         $("#gameHud").fadeIn("fast");
+
+
+        setInterval(function() {
+
+            that.addNewSkill("Javascript");
+            skills ++;
+        }, 3000);
+
+        /*that.addNewSkill("Bootstrap");
+        that.addNewSkill("Javascript");
+        that.addNewSkill("Jquery");
+        that.addNewSkill("Angular");
+        that.addNewSkill("Node.js");
+        that.addNewSkill("Meteor");
+        that.addNewSkill("Titanium");
+        that.addNewSkill("Symfony2");*/
     };
 
 
     this.togglePause = function() {
+
         if (that.isPaused) {
+            that.isPaused = false;
 
-                that.isPaused = false;
-
-                for(var i = 0; i < elements.asteroids.length; i++) {
-                    elements.asteroids[i].isMoving= true;
-                    elements.asteroids[i].move();
-                }
-
-                if (asteroidGenerator)
-                    asteroidGenerator.start();
-
-                that.turnOnArrows();
-
-                $("#backgroundScroll").addClass("horizontal_scroll");
-                $("#backgroundScroll2").addClass("horizontal_scrollFast");
-
-                $("#pauseContainer").hide();
-
+            for(var i = 0; i < elements.asteroids.length; i++) {
+                elements.asteroids[i].isMoving= true;
+                elements.asteroids[i].move();
             }
-            else {
 
-                that.isPaused = true;
+            if (asteroidGenerator)
+                asteroidGenerator.start();
 
-                if (asteroidGenerator)
-                    asteroidGenerator.stop();
-                that.turnOffArrows();
+            that.turnOnArrows();
 
-                $("#backgroundScroll").removeClass("horizontal_scroll");
-                $("#backgroundScroll2").removeClass("horizontal_scrollFast");
+            $("#backgroundScroll").addClass("horizontal_scroll");
+            $("#backgroundScroll2").addClass("horizontal_scrollFast");
 
-                $("#pauseContainer").show();
+           $("#pauseContainer ul").css({
+                transform: "scale(0)",
+                transition: "all 0.2s ease-in-out"
+            });
 
-                $("#pauseContainer li:nth-of-type(1) p, #pauseContainer li:nth-of-type(1) img").click(function(){
-                   that.togglePause();
+           setTimeout(function() {
+            $("#pauseContainer").fadeOut('fast');
+           }, 300);
+
+        }
+        else {
+            that.isPaused = true;
+
+            if (asteroidGenerator)
+                asteroidGenerator.stop();
+
+            that.turnOffArrows();
+
+            $("#backgroundScroll").removeClass("horizontal_scroll");
+            $("#backgroundScroll2").removeClass("horizontal_scrollFast");
+
+
+            $("#pauseContainer").fadeIn('fast', function() {
+                setTimeout(function() {
+                    $("#pauseContainer ul").css({
+                    transform: "scale(1)",
+                    transition: "all 0.2s ease-in-out"
                 });
-
-                $("#pauseContainer li:nth-of-type(2) p, #pauseContainer li:nth-of-type(2) img").click(function(){ 
-                    $("#pauseContainer").hide();
-                    that.backToMenu();
-                });
-            }
+                }, 300);
+            });
+        }
     };
 
 
@@ -223,6 +261,19 @@ var Game = function() {
         $("#transitionBlack").fadeIn(2500, function(){
              $("#gameContainer").hide();
         }).fadeOut(2500);
+    };
+
+    this.addNewSkill = function(skillName) {
+
+        var shape = "<div class='skillBox' >" + skillName+ "</div>";
+
+        $skillBox = $(shape);
+
+        $("#bottomResumeContainer").append($skillBox);
+
+        $skillBox.animate({
+            left: skills * ((window.innerWidth) *10/100) + "px"
+        }, 400);
     };
 
 
@@ -362,7 +413,7 @@ var Game = function() {
 
     this.showResume = function() {
 
-               
+
         $("#menu").fadeOut('fast', function() {
             $("#resumeContainer").fadeIn('fast');
         });

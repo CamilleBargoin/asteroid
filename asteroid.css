@@ -60,7 +60,6 @@ body>div {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background: url("./img/backgrounds/background_menu_parallax.png") center center;
-
 }
 
 
@@ -227,6 +226,84 @@ body>div {
 	display: none;
 }
 
+
+
+#intro {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #00fdfa;
+    z-index: 5;
+    font-size: 15px;
+    font-family: 'Neuropol';
+    letter-spacing: 0.1em;
+    line-height: 20px;
+    top: 0;
+    left: 0;
+}
+
+#introtext {
+    display: none;
+}
+
+#introTypedContainer {
+    padding: 200px 0 0 200px;
+}
+
+#introTyped .introTitle {
+    font-size: 25px;
+    text-transform: uppercase;
+}
+
+#introTyped .introHighlight {
+    color: #ff8400;
+}
+
+#introTyped .introHighlightWhite {
+    color: white;
+}
+
+#introTyped .keyboard {
+    font-family: "consolas"
+}
+
+.typed-cursor{
+    opacity: 1;
+    -webkit-animation: blink 0.7s infinite;
+    -moz-animation: blink 0.7s infinite;
+    animation: blink 0.7s infinite;
+}
+@keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-webkit-keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-moz-keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+
+#endIntroButton {
+    width: 300px;
+    height: 90px;
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    text-align: center;
+    font-size: 25px;
+    line-height: 90px;
+    cursor: pointer;
+}
+
+
+
 #spaceship {
 	height: 112px;
 	width: 112px;
@@ -242,8 +319,8 @@ body>div {
 	height: 112px;
 	width: 112px;
 	position: absolute;
-	left: 800px ;
-	top: 500px;
+	left: -200px ;
+	top: 50%;
 	z-index: 2;
 }
 
@@ -256,7 +333,7 @@ body>div {
 	z-index: 3;
 	position: relative;
 	left: 0;
-	top: 0;
+	top: -500px;
 	display: none;
 }
 
@@ -341,10 +418,19 @@ body>div {
 	color: #aaaaaa;
 }
 
+#hud_power {
+    color: white;
+    font-family: "Neuropol";
+    font-size: 16px;
+    left: 342px;
+    position: absolute;
+    top: 15px;
+}
+
 #hud_messageContainer {
 	width: 100%;
 	height: 146px;
-	bottom: 5%;
+	bottom: 30%;
 	position: absolute;
 	display: none;
 	z-index: 50;
@@ -367,12 +453,44 @@ body>div {
 	text-align: center;
 	line-height: 84px;
 	font-family: "Neuropol";
-	font-size: 32px;
+	font-size: 28px;
 	color: white;
 	padding: 0;
 	margin: 0;
 }
 
+#hud_alertMessageContainer {
+    width: 100%;
+    height: 146px;
+    top: 30%;
+    position: absolute;
+    display: none;
+    z-index: 50;
+}
+
+#hud_alertMessageBackground {
+    position: relative;
+    background: url("./img/gui/hud_message.png");
+    height: 146px;
+    width: 459px;
+    margin: 0 auto;
+}
+
+
+#hud_alertMessage {
+    position: absolute;
+    top: 36px;
+    left: 119px;
+    width: 292px;
+    height: 84px;
+    text-align: center;
+    line-height: 84px;
+    font-family: "Neuropol";
+    font-size: 28px;
+    color: red;
+    padding: 0;
+    margin: 0;
+}
 
 .rocket {
 	height: 20px;
@@ -626,6 +744,7 @@ body>div {
     height: 150px;
     width: 100%;
     border-top: 2px solid rgba(141,237,240, 0.6);
+    display: none;
 }
 
 
@@ -1134,4 +1253,11 @@ tr:nth-of-type(3) span{
 .hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+
+#nbasteroid {
+    font-size: 25px;
+    color: lime;
+    display: none;
 }

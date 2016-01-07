@@ -114,8 +114,6 @@ var Utils = function() {
                 else {
                     $explosion.css("backgroundPosition", "left " + explosionAnimation[sequencePosition].x + "px top " + explosionAnimation[sequencePosition].y + "px");
 
-                    console.log($explosion.css("backgroundPosition"));
-
                     $explosion.css({
                         width: explosionAnimation[sequencePosition].width + "px",
                         height: explosionAnimation[sequencePosition].height + "px"
@@ -144,8 +142,10 @@ var Utils = function() {
      **/
     this.blink = function(times, speed) {
 
-        for(var i = 0; i < times; i++) 
+        for(var i = 0; i < times; i++)
             this.htmlElement.fadeOut(speed).fadeIn(speed);
     };
 
 };
+
+

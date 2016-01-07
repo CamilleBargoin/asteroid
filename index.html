@@ -27,19 +27,37 @@
                     <div id="menuFooter">
                     </div>
                 </div>
-
                 <div id="gameContainer">
+                    <div id="intro">
+                        <div id="introtext">
+                            <p>
+                                <span class="introTitle">Bienvenue sur mon jeu CV!</span><br/><br/>
+                                Ta mission consiste à detruire le plus d'astéroides possible, et ainsi débloquer les compétences de mon CV<br/><br/>
+                                Pour te déplacer, utilise les touches <span class="introHighlight keyboard">Z Q S D</span> ou les fleches directionnelles.<br/>
+                                Pour tirer des <span class="introHighlightWhite">rayons lasers</span>, appuie sur la touche <span class="introHighlight keyboard">ESPACE</span>.<br/>
+                                Attention, les lasers utilisent de l'energie ! quand celle-ci tombe à zero, il faut attendre qu'elle se recharche.<br/>
+                                Ton vaisseau dispose aussi de <span class="introHighlightWhite">3 missiles dévastateurs</span>, utilise la touche <span class="introHighlight keyboard">ENTREE</span> pour les tirer.<br><br><br><br>
+                                <span class="introTitle">Es tu prêt ?</span>
+                            </p>
+                        </div>
+                        <div id="introTypedContainer">
+                            <span id="introTyped"></span>
+                        </div>
+
+                        <div id="endIntroButton">Passer l'intro -></div>
+
+                    </div>
                     <div id="gameHud">
-                        <img id="hud_lives_score"></img>
+                        <div id="hud_lives_score"></div>
                         <div id="health_sprite"></div>
-                        <img id="hud_pause"></img>
+                        <div id="hud_pause"></div>
                         <span id="hud_menu"></span>
-                        <span id="hud_start">Start</span>
-                        <p id="health" class="fullHealth"><!--sup>%</sup--></p>
+                        <p id="health" class="fullHealth"></p>
                         <p id="scoreLeft"></p>
                         <p id="scoreRight"></p>
+                        <p id="nbasteroid"><p>
+                        <span id="hud_power">Power:</span>
                         <div id="bottomResumeContainer">
-
                         </div>
                     </div>
                     <div id="pauseContainer">
@@ -57,6 +75,11 @@
                     <div id="hud_messageContainer">
                         <div id="hud_messageBackground">
                             <p id="hud_message"></p>
+                        </div>
+                    </div>
+                     <div id="hud_alertMessageContainer">
+                        <div id="hud_alertMessageBackground">
+                            <p id="hud_alertMessage"></p>
                         </div>
                     </div>
                     <div id="backgroundScroll2" class="horizontal_scrollFast"></div>
@@ -194,11 +217,12 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="./jqueryUI/jquery-ui.min.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="Utils.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="typed-js/typed.js"></script>
+    <script src="Utils.js" type="text/javascript" charset="utf-8" defer></script>
     <script src="Spaceship.js" type="text/javascript" charset="utf-8" async defer></script>
     <script src="Asteroid.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="Bonus.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="Boss.js" type="text/javascript" charset="utf-8" async defer></script>
+    <!--script src="Bonus.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="Boss.js" type="text/javascript" charset="utf-8" async defer></script-->
     <script src="Game.js" type="text/javascript" charset="utf-8" async defer></script>
 </body>
 </html>

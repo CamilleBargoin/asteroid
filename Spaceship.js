@@ -9,7 +9,7 @@ var Spaceship = function(htmlElement) {
     };
 
     var lives = 5;
-
+    var level = 0;
     var health = 100;
 
     this.htmlElement = htmlElement;
@@ -22,6 +22,7 @@ var Spaceship = function(htmlElement) {
         rockets: [],
         miniguns: []
     };
+    this.minigunsJammed = false;
 
     /**
      * [moveRight description]
@@ -97,8 +98,13 @@ var Spaceship = function(htmlElement) {
                 var delta = currentTimestamp - oldTimestamp;
 
                 if (delta > 40) {
-                    if (that.htmlElement.position().top > 0)
-                        that.htmlElement.css("top", (that.htmlElement.position().top - 10) + "px");
+                    var position = that.htmlElement.position();
+                    if (position.top > 0) {
+                        checkBottomResume(position);
+                        that.htmlElement.css("top", (position.top - 10) + "px");
+
+                    }
+
                 }
                 moveUpAnimationId = window.requestAnimationFrame(animate);
             };
@@ -124,12 +130,38 @@ var Spaceship = function(htmlElement) {
                 var delta = currentTimestamp - oldTimestamp;
 
                 if (delta > 40) {
-                    if (that.htmlElement.position().top < window.innerHeight - 90)
-                        that.htmlElement.css("top",  (that.htmlElement.position().top + 10) + "px");
+                    var position = that.htmlElement.position();
+
+                    if (position.top < window.innerHeight - 90) {
+                        checkBottomResume(position);
+                        that.htmlElement.css("top",  (position.top + 10) + "px");
+
+
+                    }
                 }
                 moveDownAnimationId = window.requestAnimationFrame(animate);
             };
             moveDownAnimationId = window.requestAnimationFrame(animate);
+        }
+    };
+
+
+    var checkBottomResume = function(position) {
+        var lock = false;
+        if(position.top  >=  (window.innerHeight - 150 - 90) && !lock) {
+            lock = true;
+            $("#bottomResumeContainer").fadeOut('fast', function() {
+                lock = false;
+            });
+        }
+        else {
+
+            if ($("#bottomResumeContainer").css("display") == "none" && !lock) {
+                lock = true;
+                $("#bottomResumeContainer").fadeIn('fast', function() {
+                    lock = false;
+                });
+            }
         }
     };
 
@@ -166,16 +198,33 @@ var Spaceship = function(htmlElement) {
      * @return {[type]} [description]
      */
     this.fireMiniguns = function() {
-        if (!this.isFiring) {
+        if (!this.isFiring && !this.minigunsJammed) {
             this.isFiring = true;
             var that = this;
 
+
             intervalFireID = setInterval(function() {
+
                 for(var i = 0; i < that.weapons.miniguns.length; i++) {
                     that.weapons.miniguns[i].fire();
                 }
+
             }, 200);
         }
+    };
+
+    this.jamMiniguns = function() {
+        console.log("Oh No! The Miniguns are jammed !");
+        this.minigunsJammed = true;
+        var that = this;
+        clearInterval(intervalFireID);
+
+        game.displayAlert("Power outtage!");
+
+        setTimeout(function() {
+            that.minigunsJammed = false;
+            game.setPower(100);
+        }, 2000);
     };
 
 
@@ -189,41 +238,41 @@ var Spaceship = function(htmlElement) {
     this.updateHealth = function(modifier) {
         health += modifier;
 
-        
+
         if (health < 100) {
             $("#health").addClass("notFull");
-            
+
             if(health == 75)
                 $("#health_sprite").css({
-                    backgroundPosition: "-290px -145px" 
+                    backgroundPosition: "-290px -145px"
                 });
             else if (health == 50)
                 $("#health_sprite").css({
-                    backgroundPosition: "-580px -290px" 
+                    backgroundPosition: "-580px -290px"
                 });
             else if (health == 25)
                 $("#health_sprite").css({
-                    backgroundPosition: "-290px -580px" 
+                    backgroundPosition: "-290px -580px"
                 });
         }
         else {
             $("#health").removeClass("notFull");
             $("#health_sprite").css({
-                backgroundPosition: "0 0" 
+                backgroundPosition: "0 0"
             });
         }
-             
+
         if (health <= 25)
             $("#health").addClass("danger");
         else
             $("#health").removeClass("danger");
 
         $("#health").html(health + "<sup>%</sup>");
-        
+
 
         if (health <= 0){
             $("#health_sprite").css({
-                backgroundPosition: "-435px -725px" 
+                backgroundPosition: "-435px -725px"
             });
             this.die();
             game.pause();
@@ -305,60 +354,71 @@ var Rocket = function() {
 
 
     this.fire = function() {
-        this.isMoving = true;
-
-        var $newRocketSpan = $("<span class='rocket'></span>");
-        $newRocketSpan.css({
-            left: this.playerShip.htmlElement.position().left + 105 +"px",
-            top: this.playerShip.htmlElement.position().top +  45  + "px"
-        });
-
-        $("#gameContainer").append($newRocketSpan);
-
-        this.htmlElement = $newRocketSpan;
-
-        var that = this;
-        var animationId;
-        var oldTimestamp;
-
-        var animate = function(currentTimestamp) {
-            oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
-            var delta = currentTimestamp - oldTimestamp;
 
 
-            if (delta > 30 && game.isPaused == false) {
+            this.isMoving = true;
 
-                // check if rocket is out of screen
-                if($newRocketSpan.position().left + 15 < window.innerWidth) {
-                    $newRocketSpan.css("left",  $newRocketSpan.position().left + that.speed + "px");
+            var $newRocketSpan = $("<span class='rocket'></span>");
+            $newRocketSpan.css({
+                left: this.playerShip.htmlElement.position().left + 105 +"px",
+                top: this.playerShip.htmlElement.position().top +  45  + "px"
+            });
+
+            $("#gameContainer").append($newRocketSpan);
+
+            var that = this;
+            var animationId;
+            var oldTimestamp;
+
+            var animate = function(currentTimestamp) {
+                oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
+                var delta = currentTimestamp - oldTimestamp;
+
+
+                if (delta > 30 && game.isPaused == false) {
+
+                    // check if rocket is out of screen
+                    if($newRocketSpan.position().left + 15 < window.innerWidth) {
+                        $newRocketSpan.css("left",  $newRocketSpan.position().left + that.speed + "px");
+                    }
+                    else {
+                        that.isMoving = false;
+                        if ($newRocketSpan) {
+                            $newRocketSpan.remove();
+                            $newRocketSpan = null;
+                        }
+                        console.log("Rocket Lost in Space!");
+                    }
+
+                    var asteroidHit = that.checkCollision( elements.asteroids, $newRocketSpan);
+
+                    if (asteroidHit) {
+                        asteroidHit.damage(that.power);
+                        that.isMoving = false;
+                        if ($newRocketSpan) {
+                            $newRocketSpan.remove();
+                            $newRocketSpan = null;
+                        }
+                        console.log("Asteroid Hit !");
+                    }
+
+
+                    oldTimestamp = currentTimestamp;
+
                 }
-                else {
-                    that.isMoving = false;
-                    if ($newRocketSpan)
-                        $newRocketSpan.remove();
-                    console.log("Rocket Lost in Space!");
+
+                if (that.isMoving) {
+                    animationId = window.requestAnimationFrame(animate);
+                } else {
+                    $newRocketSpan = null;
                 }
 
-                var asteroidHit = that.checkCollision( elements.asteroids);
-
-                if (asteroidHit) {
-                    asteroidHit.damage(that.power);
-                    that.isMoving = false;
-                    if ($newRocketSpan)
-                        $newRocketSpan.remove();
-                    console.log("Asteroid Hit !");
-                }
+            };
+            animationId = window.requestAnimationFrame(animate);
 
 
-                oldTimestamp = currentTimestamp;
 
-            }
 
-            if (that.isMoving)
-                animationId = window.requestAnimationFrame(animate);
-
-        };
-        animationId = window.requestAnimationFrame(animate);
 
     };
 };
@@ -373,63 +433,98 @@ var Minigun = function(gunPosition) {
     this.power = 8;
     this.playerShip = playerShip;
     this.gunPosition = gunPosition;
+
     var playerCraftPos = null;
 
+
     this.fire = function() {
-
-        var $newBulletSpan = $("<span class='bullet'></span>");
-        $newBulletSpan.css({
-            left: this.playerShip.htmlElement.position().left + 80 +"px",
-            top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
-        });
-        $("#gameContainer").append($newBulletSpan);
-
-
-        this.htmlElement = $newBulletSpan;
-
-        $newBulletSpan.isMoving = true;
-
-        var oldTimestamp;
-        var animationId;
         var that = this;
 
-        var animate = function(currentTimestamp) {
-            oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
-            var delta = currentTimestamp - oldTimestamp;
 
-            if (delta > that.speed && game.isPaused == false) {
+        if (game.power > 0) {
+
+            game.setPower(game.power - 2.5);
+
+            var $newBulletSpan = $("<span class='bullet'></span>");
+            $newBulletSpan.css({
+                left: this.playerShip.htmlElement.position().left + 80 +"px",
+                top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
+            });
+            $("#gameContainer").append($newBulletSpan);
 
 
-                if($newBulletSpan.position().left + 15 < window.innerWidth) {
-                    $newBulletSpan.css("left", $newBulletSpan.position().left + 10 + "px");
+            this.htmlElement = $newBulletSpan;
+
+            $newBulletSpan.isMoving = true;
+
+            var oldTimestamp, lastCollisionChecked;
+            var animationId;
+
+
+
+            var animate = function(currentTimestamp) {
+
+                oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
+                lastCollisionChecked = (lastCollisionChecked) ? lastCollisionChecked : currentTimestamp;
+
+                var delta = currentTimestamp - oldTimestamp;
+                var deltaCollision = currentTimestamp - lastCollisionChecked;
+
+                if (delta > that.speed && game.isPaused == false) {
+
+
+
+                    if($newBulletSpan.position().left + 15 < window.innerWidth) {
+                        $newBulletSpan.css("left", $newBulletSpan.position().left + 10 + "px");
+                    }
+                    else {
+
+                        if ($newBulletSpan){
+                            $newBulletSpan.remove();
+                            $newBulletSpan.isMoving = false;
+                        }
+                    }
+
+
+                    if (deltaCollision > 60) {
+                        var asteroidHit = that.checkCollision(elements.asteroids, $newBulletSpan);
+
+                        if (asteroidHit) {
+
+                            asteroidHit.damage(that.power);
+                            if ($newBulletSpan) {
+                                $newBulletSpan.remove();
+                                $newBulletSpan.isMoving = false;
+                            }
+                        }
+                        lastCollisionChecked = currentTimestamp;
+
+                    }
+
+
+
+                   oldTimestamp = currentTimestamp;
+                }
+
+                if ($newBulletSpan && $newBulletSpan.isMoving) {
+
+                    animationId = window.requestAnimationFrame(animate);
                 }
                 else {
-                    $newBulletSpan.isMoving = false;
-                    if ($newBulletSpan);
-                        $newBulletSpan.remove();
+                    $newBulletSpan = null;
                 }
 
-                var asteroidHit = that.checkCollision(elements.asteroids, $newBulletSpan);
+            };
+            animationId = window.requestAnimationFrame(animate);
 
-                if (asteroidHit) {
-
-                    asteroidHit.damage(that.power);
-                    if ($newBulletSpan)
-                        $newBulletSpan.remove();
-                    $newBulletSpan.isMoving = false;
-                }
-
-
-               oldTimestamp = currentTimestamp;
+         }
+        else {
+            if (!this.playerShip.minigunsJammed) {
+                this.playerShip.jamMiniguns();
             }
-            if ($newBulletSpan.isMoving)
-                animationId = window.requestAnimationFrame(animate);
+        }
 
-        };
-        animationId = window.requestAnimationFrame(animate);
+
     };
 };
 
-//Minigun.prototype = new Utils();
-//Rocket.prototype = new Utils();
-//Spaceship.prototype = new Utils();

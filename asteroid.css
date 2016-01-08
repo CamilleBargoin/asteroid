@@ -325,8 +325,6 @@ body>div {
 }
 
 
-
-
 #gameHud {
 	width: 100%;
     height: 100%;
@@ -693,17 +691,17 @@ body>div {
 
 #pauseContainer ul {
 	position: absolute;
-     margin: auto;
-     top: 0;
-     right: 0;
-     bottom: 0;
-     left: 0;
-     width: 40%;
-     height: 300px;
-     background-color: rgba(0, 0, 0, 0.2);
-     border-radius: 25px;
-     border: 3px solid #00fdfa;
-     -webkit-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    height: 300px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+    border: 3px solid #00fdfa;
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
 	-moz-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
 	box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
     transform: scale(0);
@@ -735,6 +733,95 @@ body>div {
 	cursor: pointer;
 }
 
+#endGameContainer {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: none;
+}
+
+#endGameContainer > span {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    height: 358px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+    border: 3px solid #00fdfa;
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    transform: scale(0);
+    color: white;
+    font-family: 'Neuropol';
+    display: block;
+    padding: 26px;
+}
+
+#endGameContainer h2 {
+    text-align: center;
+    font-size: 42px;
+    letter-spacing: 0.2em;
+    margin-bottom: 65px;
+}
+
+#endGameContainer p {
+    font-size: 25px;
+    text-align: left;
+    margin: 0 auto;
+    width: 73%;
+    color: #00fdfa;
+}
+
+#endGameContainer input {
+    border: 2px solid white;
+    border-radius: 10px;
+    border: 3px solid #00fdfa;
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    box-shadow: 0px 0px 5px 5px rgba(141,237,240,0.2);
+    background-color: rgba(0, 255, 255, 0.2);
+    /*color: #00fdfa;*/
+    color: white;
+    font-size: 25px;
+    padding: 10px;
+    text-align: center;
+    width: 70%;
+    margin: 15px auto;
+    display: block;
+    font-family: "Neuropol";
+    letter-spacing: 0.2em;
+}
+
+#submitNameButton {
+    border: 3px solid #00fdfa;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 5px rgba(141, 237, 240, 0.2);
+    color: black;
+    font-family: "Neuropol";
+    height: 30px;
+    letter-spacing: 0.2em;
+    width: 20%;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 55px;
+    float: right;
+    background-color: rgba(0, 255, 255, 0.80);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+
+
 
 #bottomResumeContainer {
     background-color: rgba(141,237,240, 0.05);
@@ -745,6 +832,18 @@ body>div {
     width: 100%;
     border-top: 2px solid rgba(141,237,240, 0.6);
     display: none;
+}
+
+#bottomResumeContainer p {
+    color: rgba(255, 255, 255, 0.3);
+    font-family: "Neuropol";
+    font-size: 42px;
+    text-align: center;
+    line-height: 150px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
 }
 
 

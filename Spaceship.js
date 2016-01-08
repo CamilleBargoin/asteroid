@@ -1,7 +1,7 @@
 /**
  * [Spaceship description]
  */
-var Spaceship = function(htmlElement) {
+var Spaceship = function() {
 
     var initialPos = {
         top: 500,
@@ -12,7 +12,7 @@ var Spaceship = function(htmlElement) {
     var level = 0;
     var health = 100;
 
-    this.htmlElement = htmlElement;
+    this.htmlElement = null;
     this.isMovingRight = false;
     this.isMovingLeft = false;
     this.isMovingUp = false;
@@ -23,6 +23,15 @@ var Spaceship = function(htmlElement) {
         miniguns: []
     };
     this.minigunsJammed = false;
+
+
+    this.createElement = function() {
+
+        this.htmlElement = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
+
+        $("#gameContainer").append(this.htmlElement);
+    };
+
 
     /**
      * [moveRight description]
@@ -275,7 +284,6 @@ var Spaceship = function(htmlElement) {
                 backgroundPosition: "-435px -725px"
             });
             this.die();
-            game.pause();
         }
     };
 
@@ -298,7 +306,18 @@ var Spaceship = function(htmlElement) {
      * @return {[type]} [description]
      */
     this.die = function() {
-        alert("AAAaaaaarrrrrggghhhh !!!");
+
+
+        this.isMovingLeft = false;
+        this.isMovingRight = false;
+        this.isMovingUp = false;
+        this.isMovingDown = false;
+
+        //TODO: EXPLOSION
+        //
+        asteroidGen.stop();
+        game.endGame();
+
     };
 
 

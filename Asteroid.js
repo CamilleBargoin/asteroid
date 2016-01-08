@@ -77,13 +77,12 @@ var AsteroidGenerator = function() {
                          that.die();
                     }
 
-
                     var spaceshipHit = that.checkCollision(elements.spaceships);
 
                     if (spaceshipHit) {
                         that.isMoving = false;
                         spaceshipHit.damage();
-                        that.damage(100);
+                        that.damage(1000);
                     }
 
                     oldTimestamp = currentTimestamp;
@@ -131,8 +130,6 @@ var AsteroidGenerator = function() {
             var that = this;
 
             this.isMoving = false;
-            var counterElement = $("#asteroidDestroyed");
-            counterElement.innerHTML = parseInt(counterElement.innerHTML, 10) + 1;
 
             this.explodeAnimate(this, function() {
                 that.die();
@@ -204,6 +201,8 @@ var AsteroidGenerator = function() {
             var newAsteroid = null;
             var randomAsteroid = Math.floor(Math.random() * 3);
 
+            randomAsteroid = 2;
+
             if (randomAsteroid == 0)
                 newAsteroid = new smallAsteroid();
             else if (randomAsteroid == 1)
@@ -223,7 +222,7 @@ var AsteroidGenerator = function() {
             }
 
 
-        }, 3000);
+        }, 4000);
 
     };
 

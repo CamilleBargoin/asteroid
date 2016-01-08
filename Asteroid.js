@@ -201,8 +201,6 @@ var AsteroidGenerator = function() {
             var newAsteroid = null;
             var randomAsteroid = Math.floor(Math.random() * 3);
 
-            randomAsteroid = 2;
-
             if (randomAsteroid == 0)
                 newAsteroid = new smallAsteroid();
             else if (randomAsteroid == 1)
@@ -222,7 +220,7 @@ var AsteroidGenerator = function() {
             }
 
 
-        }, 4000);
+        }, 43000);
 
     };
 

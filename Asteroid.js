@@ -135,6 +135,11 @@ var AsteroidGenerator = function() {
                 that.die();
                 game.updateScore(that.score);
             });
+
+            $("<audio></audio>")
+                .attr("src", "./sound/explosion02.mp3")
+                .prop("volume", 0.6)
+                .trigger("play");
         };
 
 

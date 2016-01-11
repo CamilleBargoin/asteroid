@@ -68,6 +68,11 @@ var BonusGenerator = function() {
                         elements.spaceships[0].maxEnergy(newEnergy);
                         elements.spaceships[0].currentEnergy(newEnergy);
                         game.displayEnergy(newEnergy);
+
+                        $("<audio></audio>")
+                            .attr("src", "./sound/charge02.mp3")
+                            .prop("volume", 0.6)
+                            .trigger("play");
                     }
 
                     oldTimestampX = currentTimestamp;

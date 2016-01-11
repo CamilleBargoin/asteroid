@@ -295,6 +295,8 @@
 
                 bonusGen = new BonusGenerator();
                 bonusGen.start();
+                $("#audioMain")[0].volume = 0.6;
+                $("#audioMain")[0].play();
             }, 1000);
 
 

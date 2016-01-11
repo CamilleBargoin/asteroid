@@ -222,6 +222,11 @@ var Spaceship = function() {
 
 
             intervalFireID = setInterval(function() {
+ 
+                $("<audio></audio>")
+                    .attr("src", "./sound/laser08.mp3")
+                    .prop("volume", 0.2)
+                    .trigger("play");
 
                 for(var i = 0; i < that.weapons.miniguns.length; i++) {
                     that.weapons.miniguns[i].fire();
@@ -486,6 +491,8 @@ var Minigun = function(gunPosition) {
                 top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
             });
             $("#gameContainer").append($newBulletSpan);
+
+            
 
             this.htmlElement = $newBulletSpan;
 

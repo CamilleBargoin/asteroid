@@ -220,7 +220,7 @@ var AsteroidGenerator = function() {
             }
 
 
-        }, 43000);
+        }, 3000);
 
     };
 

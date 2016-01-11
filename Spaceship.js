@@ -10,7 +10,7 @@ var Spaceship = function() {
 
     var lives = 5;
     var level = 0;
-    var health = 100;
+    var health = 25;
 
     this.htmlElement = null;
     this.isMovingRight = false;

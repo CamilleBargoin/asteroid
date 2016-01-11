@@ -120,21 +120,32 @@
             });
 
 
+            $('#saveScoreForm').on('submit', function(e) {
+                e.preventDefault(); 
 
-            // SUBMIT Button from game over screen
-            $("#submitNameButton").click(function(event) {
+                var $this = $(this); // L'objet jQuery du formulaire
 
-                // TODO: SAVE NAME AND SCORE ON SERVER
-               alert($("#endGameContainer input").val());
+                // Envoi de la requête HTTP en mode asynchrone
+                $.ajax({
+                    url: $this.attr('action'), 
+                    type: $this.attr('method'), 
+                    data: $this.serialize(), 
+                    dataType: 'json',
+                    success: function(json) { 
+                        if(json.reponse === 'ok') {
 
-               $("#endGameContainer span").css({
-                    transform: "scale(0)",
-                    transition: "all 0.2s ease-in-out"
+                            $("#endGameContainer span").css({
+                                transform: "scale(0)",
+                                transition: "all 0.2s ease-in-out"
+                            });
+
+                            $("#endGameContainer").fadeOut('fast', that.backToMenu);
+
+                        } else {
+                            alert('Erreur : '+ json.reponse);
+                        }
+                    }
                 });
-
-                setTimeout(function() {
-                    $("#endGameContainer").fadeOut('fast', that.backToMenu);
-               }, 300);
             });
 
 
@@ -153,8 +164,8 @@
             });
 
             //  DOWNLOAD button from resume screen
-            $("#downloadResume").click(function() {
-                alert("télécharger le CV");
+            $("#dlResumeButton").click(function() {
+                window.open("Camille Bargoin CV 2015.pdf");
             });
 
 
@@ -267,14 +278,6 @@
 
             that.setPower(that.power);
             game.turnOnArrows();
-
-
-
-
-
-
-
-
 
 
             //
@@ -506,8 +509,6 @@
 
                 $("#backgroundScroll2").addClass('horizontal_scrollFast');
                 $("#backgroundScroll2").removeClass('vertical_scrollFast');
-
-
             }
         };
 
@@ -518,41 +519,88 @@
             });
 
 
+            // Envoi de la requête HTTP en mode asynchrone
+            $.ajax({
+                url: "score.php",
+                type: "post", 
+                data: "callFunction=getScores", 
+                dataType: 'json',
+                success: function(json) {
 
+                   var namesAndScores = json.reponse.split(";");
+                   var sortedScores = [];
+
+                   for(var i = 0; i < namesAndScores.length; i++) {
+                        var line = namesAndScores[i].split(":");
+
+                        sortedScores.push({
+                            name: line[0],
+                            score: line[1]
+                        });
+                   }
+
+                    sortedScores.sort(function (a, b) {
+                        if (a.score < b.score)
+                          return 1;
+                        if (a.score > b.score)
+                          return -1;
+                        return 0;
+                    });
+
+                    for (var i = 0; i < 10; i++) {
+                        $("#scoreContainer tbody").append('<tr><td><span class="scorePos">' + (i + 1) + '</span></td>' + 
+                            '<td class="scoreName">' + sortedScores[i].name + '</td>' + 
+                            '<td class="scoreNumber">' + sortedScores[i].score + '</td></tr>');
+                    }
+                }
+            });
         };
 
 
         this.showResume = function() {
 
-
             $("#menu").fadeOut('fast', function() {
-                $("#resumeContainer").fadeIn('fast');
+
+
+                $("#resumeContainer").fadeIn('fast', function() {
+
+
+                    $("#resumeBodyCenter > div").animate({
+                        top: "20px"
+                    }, 800, function() {
+                        $("#resumePersonalData").animate({
+                            left: 0,
+                            top: "20px"
+                        }, 500);
+                         $(".resumeSide ul").animate({
+                            left: "3%",
+                            top: "20px"
+                        }, 500);
+                    });
+                    
+                });
+
             });
 
 
+         
 
-
-            $(".resumeCol:nth-of-type(1) img").mouseenter(function(){
-                $(".resumeTexts").hide();
-                $("#resumePersonalData").fadeIn('fast');
-            });
-
-            $(".resumeCol:nth-of-type(2) img").mouseenter(function(){
+            $("#resumeBody ul li:nth-of-type(1)").mouseenter(function(){
                 $(".resumeTexts").hide();
                 $("#resumeSkills").fadeIn('fast');
             });
 
-            $(".resumeCol:nth-of-type(3) img").mouseenter(function(){
+            $("#resumeBody ul li:nth-of-type(3)").mouseenter(function(){
                 $(".resumeTexts").hide();
                 $("#resumeWorks").fadeIn('fast');
             });
 
-            $(".resumeCol:nth-of-type(4) img").mouseenter(function(){
+            $("#resumeBody ul li:nth-of-type(5)").mouseenter(function(){
                 $(".resumeTexts").hide();
                 $("#resumeFormation").fadeIn('fast');
             });
 
-
+/*
             $("#resumePersonalData").mouseleave(function(){
                 $("#resumePersonalData").fadeOut('fast');
             });
@@ -568,6 +616,7 @@
             $("#resumeFormation").mouseleave(function(){
                 $("#resumeFormation").fadeOut('fast');
             });
+*/
 
         };
 
@@ -635,20 +684,21 @@
             setTimeout(function() {
                 $("#endGameContainer").fadeIn('fast', function() {
                     setTimeout(function() {
-                        $("#endGameContainer input").val("PSEUDO");
+                        $("#scoreFormPseudo").val("PSEUDO");
                         $("#endGameContainer span").css({
                             transform: "scale(1)",
                             transition: "all 0.2s ease-in-out"
                         });
 
                          $("#endGameContainer p").html("Score: " + score);
+                         $("#scoreFormScore").val(score);
                     }, 300);
                 });
             }, 800);
 
 
 
-            $("#endGameContainer input").focus(function(event) {
+            $("#scoreFormPseudo").focus(function(event) {
                $(this).val("");
             });
 

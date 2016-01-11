@@ -16,6 +16,7 @@
                 <div id="menu">
                     <div id="menuHeader">
                         <h1>Asteroid Shower</h1>
+                        <div id="wip"><span>{</span> en cours de développement <span>}</span></div>
                     </div>
                     <div id="menuList">
                         <ul>
@@ -72,11 +73,16 @@
                         </ul>
                     </div>
                     <div id="endGameContainer">
+
                         <span>
-                            <h2>GAME OVER</h2>
-                            <p>SCORE:</p>
-                            <input type="text" value="PSEUDO"/>
-                            <div id="submitNameButton">VALIDER</div>
+                            <form id="saveScoreForm" action="score.php"  method="post">
+                                <h2>GAME OVER</h2>
+                                <p>SCORE:</p>
+                                <input type="text" value="PSEUDO" name="pseudo" id="scoreFormPseudo"/>
+                                <input type="hidden" name="score" value="" id="scoreFormScore"/>
+                                <input type="hidden" name="callFunction" value="saveScore"/>
+                                <input id="submitNameButton" type="submit" value="VALIDER"></input>
+                            </form>
                         </span>
                     </div>
                     <div id="hud_messageContainer">
@@ -102,7 +108,7 @@
                             <h1>MEILLEURS SCORES</h1>
                            <table>
                             <tbody>
-                                <tr>
+                                <!--tr>
                                     <td><span class="scorePos">1</span></td><td class="scoreName">Dark Vador</td><td class="scoreNumber">986548</td>
                                 </tr>
                                 <tr>
@@ -131,7 +137,7 @@
                                 </tr>
                                  <tr>
                                     <td><span class="scorePos">10</span></td><td class="scoreName">...</td><td class="scoreNumber">...</td>
-                                </tr>
+                                </tr-->
                             </tbody>
                         </table>
                         </div>
@@ -148,70 +154,105 @@
                             <div class="resumeSide">
                                 <div class="backButton"></div>
                                 <img src="./img/gui/button_arrow_left.png" alt="">
-                                <div id="downloadResume"></div>
+                                
                             </div>
                             <div id="resumeHeaderCenter">
                                 <img src="./img/gui/frame_top.png" alt="">
                                 <p>Camille Bargoin</p>
                                 <h1>Développeur Javascript Web & Mobile</h1>
                             </div>
-                            <div class="resumeSide"></div>
+                            <div class="resumeSide">
+                                
+                            </div>
                         </div>
                         <div id="resumeBody">
-                            <div class="resumeSide"></div>
+                            <div class="resumeSide" id="leftPanel">
+                                <ul>
+                                    <!--li>
+                                        <p>Coordonnées</p>
+                                    </li>
+                                    <li>
+                                        <hr/>
+                                    </li-->
+                                    <li>
+                                         <p>Compétences</p>
+                                    </li>
+                                    <li>
+                                        <hr/>
+                                    </li>
+                                    <li>
+                                        <p>Expériences professionnelles</p>
+                                    </li>
+                                    <li>
+                                        <hr/>
+                                    </li>
+                                    <li>
+                                        <p>Formation</p>
+                                    </li>
+                                    <li>
+                                        <hr/>
+                                    </li>
+                                </ul>
+                            </div>
                             <div id="resumeBodyCenter">
                                 <div>
-                                    <div class="resumeCol">
-                                        <img src="./img/backgrounds/planet_1.png" alt="" class="hvr-wobble-to-bottom-right">
-                                        <p>Coordonnées</p>
+                                    <!--div id="resumePersonalData" class="resumeTexts">
+                                        <p>Camille Bargoin</p>
+                                        <p>29 ans</p>
+                                        <p>87 rue Saint Fargeau, 75020 Paris</p>
+                                        <p>+33 7 82 81 93 51</p>
+                                    </div-->
+                                    <div id="resumeSkills" class="resumeTexts">
+                                        <p>
+                                            - Javascript<br/>
+                                            - HTML5 / CSS3<br/>
+                                            - Bootstrap<br/>
+                                            - jQuery<br/>
+                                            - Angular<br/>
+                                            - MongDB<br/>
+                                            - Node.js<br/>
+                                            - Express<br/>
+                                            - Meteor<br/>
+                                            - Titanium Mobile<br/>
+                                            - Conception / Publication Mobile<br/>
+                                            - PHP / SQL<br/>
+                                            - Symfony 2<br/>
+                                        </p>
                                     </div>
-                                    <div class="resumeCol">
-                                        <img src="./img/backgrounds/planet_2.png" alt="skills" class="hvr-wobble-to-top-right">
-                                         <p>Compétences</p>
+                                    <div id="resumeWorks" class="resumeTexts">
+                                    <p>
+                                        - Responsable Projet Technique<br/>
+                                        - Développeur Mobile & Web
+                                        </p>
                                     </div>
-                                    <div class="resumeCol">
-                                        <img src="./img/backgrounds/planet_3.png" alt="works" class="hvr-wobble-to-bottom-right">
-                                        <p>Expériences professionnelles</p>
-                                    </div>
-                                    <div class="resumeCol">
-                                        <img src="./img/backgrounds/planet_4.png" alt="formation" class="hvr-wobble-to-top-right">
-                                        <p>Formation</p>
+                                    <div id="resumeFormation" class="resumeTexts">
+                                    <p>
+                                        - Intégrateur - Déevloppeur Web Javascript Fullstack<br/>
+                                        - Expert en Systèmes et Réseaux Informatiques (Niveau I)<br/>
+                                        - Bachelor Of Computer Science<br/>
+                                        - BTS Informatique de Gestion
+                                    </p>
                                     </div>
                                 </div>
-
-                                <div id="resumePersonalData" class="resumeTexts">
-                                    <p>Camille Bargoin</p>
-                                    <p>29 ans</p>
-                                    <p>87 rue Saint Fargeau, 75020 Paris</p>
-                                    <p>+33 7 82 81 93 51</p>
-                                </div>
-                                <div id="resumeSkills" class="resumeTexts">
-                                    - Javascript<br/>
-                                    - HTML5 / CSS3<br/>
-                                    - Bootstrap<br/>
-                                    - jQuery<br/>
-                                    - Angular<br/>
-                                    - MongDB<br/>
-                                    - Node.js<br/>
-                                    - Express<br/>
-                                    - Meteor<br/>
-                                    - Titanium Mobile<br/>
-                                    - Conception / Publication Mobile<br/>
-                                    - PHP / SQL<br/>
-                                    - Symfony 2<br/>
-                                </div>
-                                <div id="resumeWorks" class="resumeTexts">
-                                    - Responsable Projet Technique<br/>
-                                    - Développeur Mobile & Web
-                                </div>
-                                <div id="resumeFormation" class="resumeTexts">
-                                    - Intégrateur - Déevloppeur Web Javascript Fullstack<br/>
-                                    - Expert en Systèmes et Réseaux Informatiques (Niveau I)<br/>
-                                    - Bachelor Of Computer Science<br/>
-                                    - BTS Informatique de Gestion
+                                
+                                
+                            </div>
+                            <div class="resumeSide" id="rightPanel">
+                                <div id="resumePersonalData">
+                                    <div >
+                                        <p>Camille Bargoin<br/>
+                                        29 ans<br/>
+                                        87 rue Saint Fargeau, <br/>
+                                        75020 Paris<br/>
+                                        +33 7 82 81 93 51<br/>
+                                        </p>
+                                        <div id="dlResumeButton">
+                                            Télécharger le CV en PDF
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
-                            <div class="resumeSide"></div>
                         </div>
                         <div id="resumeFooter">
 

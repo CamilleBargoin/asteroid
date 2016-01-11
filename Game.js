@@ -121,17 +121,17 @@
 
 
             $('#saveScoreForm').on('submit', function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
 
                 var $this = $(this); // L'objet jQuery du formulaire
 
                 // Envoi de la requête HTTP en mode asynchrone
                 $.ajax({
-                    url: $this.attr('action'), 
-                    type: $this.attr('method'), 
-                    data: $this.serialize(), 
+                    url: $this.attr('action'),
+                    type: $this.attr('method'),
+                    data: $this.serialize(),
                     dataType: 'json',
-                    success: function(json) { 
+                    success: function(json) {
                         if(json.reponse === 'ok') {
 
                             $("#endGameContainer span").css({
@@ -158,8 +158,14 @@
 
             // BACK TO MENU from resume screen
             $(".backButton").click(function(){
-                    $("#resumeContainer").fadeOut('fast', function() {
+                $("#resumeContainer").fadeOut('fast', function() {
                     $("#menu").fadeIn('fast');
+
+                    $("#resumePersonalData").css("left", "500px");
+                    $("#resumeBodyCenter > div").css("top", "3000px");
+                    $(".resumeSide ul").css("left", "-500px");
+
+
                 });
             });
 
@@ -276,7 +282,7 @@
             $("#scoreLeft").html("");
             $("#scoreRight").html(score);
 
-            that.setPower(that.power);
+            that.displayEnergy(that.power);
             game.turnOnArrows();
 
 
@@ -286,6 +292,9 @@
             setTimeout(function() {
                 asteroidGen = new AsteroidGenerator();
                 asteroidGen.start();
+
+                bonusGen = new BonusGenerator();
+                bonusGen.start();
             }, 1000);
 
 
@@ -369,11 +378,12 @@
 
 
 
-        this.setPower = function(newPower) {
-            this.power = newPower;
-            $("#hud_power").html("Power: " + newPower);
+        this.displayEnergy = function(newEnergy) {
+            //this.power = newPower;
 
-            if (this.power <= 20)
+            $("#hud_power").html("Energie: " + newEnergy);
+
+            if (newEnergy <= 20)
                 $("#hud_power").css("color", "red");
             else
                 $("#hud_power").css("color", "white");
@@ -522,8 +532,8 @@
             // Envoi de la requête HTTP en mode asynchrone
             $.ajax({
                 url: "score.php",
-                type: "post", 
-                data: "callFunction=getScores", 
+                type: "post",
+                data: "callFunction=getScores",
                 dataType: 'json',
                 success: function(json) {
 
@@ -548,8 +558,8 @@
                     });
 
                     for (var i = 0; i < 10; i++) {
-                        $("#scoreContainer tbody").append('<tr><td><span class="scorePos">' + (i + 1) + '</span></td>' + 
-                            '<td class="scoreName">' + sortedScores[i].name + '</td>' + 
+                        $("#scoreContainer tbody").append('<tr><td><span class="scorePos">' + (i + 1) + '</span></td>' +
+                            '<td class="scoreName">' + sortedScores[i].name + '</td>' +
                             '<td class="scoreNumber">' + sortedScores[i].score + '</td></tr>');
                     }
                 }
@@ -576,28 +586,157 @@
                             left: "3%",
                             top: "20px"
                         }, 500);
+
+                         setTimeout(function() {
+
+                            $("#resumeBody ul li:nth-of-type(1)").trigger('mouseenter');
+                         }, 500);
+
                     });
-                    
+
+
+
                 });
 
             });
 
 
-         
 
             $("#resumeBody ul li:nth-of-type(1)").mouseenter(function(){
                 $(".resumeTexts").hide();
-                $("#resumeSkills").fadeIn('fast');
+                $("#resumeSkills").fadeIn('1500').css("display", "table");
+
+                gradient3 = {
+                    color: "#00FDFA"
+                };
+
+                gradient2 = {
+                    color: "#00ADAD"
+                };
+
+                gradient1 = {
+                    color: "#006767"
+                };
+
+                $("#circleHtml").circleProgress({
+                    value: 0.95,
+                    animationStartValue: 0,
+                    size: 80,
+                    fill: gradient3,
+                    startAngle: 0
+                });
+
+                $("#circleBootstrap").circleProgress({
+                    value: 0.95,
+                    animationStartValue: 0,
+                    size: 80,
+                    fill: gradient3,
+                    startAngle: 0
+                });
+
+                $("#circleJquery").circleProgress({
+                    value: 0.95,
+                    animationStartValue: 0,
+                    size: 80,
+                    fill: gradient3,
+                    startAngle: 0
+                });
+
+                $("#circleAngular").circleProgress({
+                    value: 0.8,
+                    size: 80,
+                    fill: gradient2,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleMongo").circleProgress({
+                    value: 0.8,
+                    size: 80,
+                    fill: gradient2,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleNode").circleProgress({
+                    value: 0.5,
+                    size: 80,
+                    fill: gradient1,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleExpress").circleProgress({
+                    value: 0.5,
+                    size: 80,
+                    fill: gradient1,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleMeteor").circleProgress({
+                    value: 0.5,
+                    size: 80,
+                    fill: gradient1,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleTitanium").circleProgress({
+                    value: 0.95,
+                    size: 80,
+                    fill: gradient3,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleConception").circleProgress({
+                    value: 0.90,
+                    size: 80,
+                    fill: gradient3,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circlePhp").circleProgress({
+                    value: 0.80,
+                    size: 80,
+                    fill: gradient2,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+                $("#circleSymfony").circleProgress({
+                    value: 0.80,
+                    size: 80,
+                    fill: gradient2,
+                    animationStartValue: 0,
+                    startAngle: 0
+                });
+
+
+                $(".resumeSkillContainer").mouseenter(function() {
+                    $(this).css({
+                        transform: "scale(1.5)",
+                        transition: "all 0.2s ease-in-out"
+                    });
+                }).mouseleave(function(){
+                    $(this).css({
+                        transform: "scale(1)",
+                        transition: "all 0.2s ease-in-out"
+                    });
+                });
+
             });
 
             $("#resumeBody ul li:nth-of-type(3)").mouseenter(function(){
                 $(".resumeTexts").hide();
-                $("#resumeWorks").fadeIn('fast');
+                $("#resumeWorks").fadeIn('1500');
             });
 
             $("#resumeBody ul li:nth-of-type(5)").mouseenter(function(){
                 $(".resumeTexts").hide();
-                $("#resumeFormation").fadeIn('fast');
+                $("#resumeFormation").fadeIn('1500');
             });
 
 /*

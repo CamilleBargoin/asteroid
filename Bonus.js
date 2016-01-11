@@ -1,10 +1,9 @@
-var bonusId = 0;
+var BonusGenerator = function() {
 
-var BonusFactory = function(args) {
+    var bonusId = 0;
 
     var Bonus = function(args) {
-        this.id = bonusId++;
-        this.name = (args.name) ? args.name : "default";
+
         this.isMoving = false;
         this.htmlElement = null;
         this.className = (args.className) ? args.className : "";
@@ -13,10 +12,6 @@ var BonusFactory = function(args) {
 
         this.createElement = function() {
             this.htmlElement = $("<img></img>");
-            //this.htmlElement.className = this.className;
-            //this.htmlElement.style.left =  window.innerWidth + "px";
-            //this.htmlElement.src = this.src;
-            //this.htmlElement.style.top = (Math.random() * window.innerHeight - 100) + 100 + "px";
 
             this.htmlElement.css({
                 top: (Math.random() * window.innerHeight - 100) + 100 + "px",
@@ -26,10 +21,10 @@ var BonusFactory = function(args) {
             this.htmlElement.attr("src", this.src);
             this.htmlElement.addClass(this.className);
 
-           $("#gameFrame").append(this.htmlElement);
+           $("#gameContainer").append(this.htmlElement);
         };
 
-        this.launch = function() {
+        this.move = function() {
             var that = this;
             var oldTimestampX, oldTimestampY;
             this.isMoving = true;
@@ -45,7 +40,7 @@ var BonusFactory = function(args) {
                 var deltaY = currentTimestamp - oldTimestampY;
                 var spaceshipHit, currentPos = null;
 
-                if (deltaX > 30) {
+                if (deltaX > 30 && game.isPaused == false) {
 
                     currentPos = that.htmlElement.position();
                     that.htmlElement.css("left", (currentPos.left - 7) + "px");
@@ -69,7 +64,10 @@ var BonusFactory = function(args) {
                         that.isMoving = false;
                         that.destroy();
                         console.log("Congratulations! You just captured the " + that.name + " Bonus !");
-                        that.displayBonus();
+                        var newEnergy = elements.spaceships[0].maxEnergy() + 100;
+                        elements.spaceships[0].maxEnergy(newEnergy);
+                        elements.spaceships[0].currentEnergy(newEnergy);
+                        game.displayEnergy(newEnergy);
                     }
 
                     oldTimestampX = currentTimestamp;
@@ -89,19 +87,6 @@ var BonusFactory = function(args) {
         };
 
 
-        this.displayBonus = function() {
-            var $displayBonusContainer = $("<div></div>");
-            $displayBonusContainer.addClass("displayBonusContainer");
-            $displayBonusContainer.css("backgroundColor", "rgba(" + this.rgba + ")");
-            $displayBonusContainer.html((this.name + " learned !").toUpperCase());
-            $("body").append($displayBonusContainer);
-
-            setTimeout(function() {
-                 $displayBonusContainer.remove();
-             }, 1000);
-        };
-
-
         /**
          * [destroy description]
          * @return {[type]} [description]
@@ -110,63 +95,31 @@ var BonusFactory = function(args) {
             if (this.htmlElement)
                 this.htmlElement.remove();
 
-            //removes Bonus from the global array elements.Bonuses
-             for(var i = 0; i < elements.bonuses.length; i++) {
-                if(elements.bonuses[i].id == this.id) {
-                    elements.bonuses[i] = null;
-                    elements.bonuses.splice(i, 1);
-                }
-             }
         };
     };
 
     Bonus.prototype = new Utils();
 
-    return new Bonus(args);
-};
-
-
-
-
-var BonusGenerator = function() {
+    var bonusGenerationIntervalId = null;
 
 
     this.start = function() {
+        var that = this;
 
+        bonusGenerationIntervalId = setInterval(function() {
 
-        var html5Bonus = BonusFactory({
-            name: "html5",
-            className: "bonus",
-            src: "html5.png",
-            rgba: "244,100,47,0.8"
-        });
-        html5Bonus.createElement();
-        html5Bonus.launch();
-
-        setTimeout(function() {
-            var css3Bonus = BonusFactory({
-                name: "css3",
+            that.energyBonus = new Bonus({
+                name: "energy",
                 className: "bonus",
-                src: "css3.png",
-                rgba: "39,166,221,0.8"
+                src: "./img/energy.png",
+                rgba: "244,100,47,0.8"
             });
-            css3Bonus.createElement();
-            css3Bonus.launch();
+            that.energyBonus.createElement();
+            that.energyBonus.move();
 
-            setTimeout(function() {
-                var angularBonus = BonusFactory({
-                    name: "Angular",
-                    className: "bonus",
-                    src: "angular.png",
-                    rgba: "185,41,51,0.8"
-                });
-                angularBonus.createElement();
-                angularBonus.launch();
+        }, 30000);
 
-            }, 4000);
-        }, 4000);
     };
-
 
 
     this.stop = function() {

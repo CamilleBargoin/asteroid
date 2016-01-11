@@ -10,7 +10,8 @@ var Spaceship = function() {
 
     var lives = 5;
     var level = 0;
-    var health = 25;
+    var health = 100;
+    var maxEnergy = 100, currentEnergy = 100;
 
     this.htmlElement = null;
     this.isMovingRight = false;
@@ -175,10 +176,18 @@ var Spaceship = function() {
     };
 
 
-    this.rotate = function() {
+    this.currentEnergy = function(newValue) {
+        if (typeof newValue != 'undefined')
+            currentEnergy = newValue;
+        else
+            return currentEnergy;
+    };
 
-           // this.htmlElement.addClass('rotateUp');
-
+    this.maxEnergy = function(newValue) {
+        if (typeof newValue != 'undefined')
+            maxEnergy = newValue;
+        else
+            return maxEnergy;
     };
 
     /**
@@ -228,11 +237,13 @@ var Spaceship = function() {
         var that = this;
         clearInterval(intervalFireID);
 
-        game.displayAlert("Power outtage!");
+        game.displayAlert("Energie Epuisée!");
 
         setTimeout(function() {
             that.minigunsJammed = false;
-            game.setPower(100);
+            //game.setPower(100);
+            game.displayEnergy(that.maxEnergy());
+            that.currentEnergy(that.maxEnergy());
         }, 2000);
     };
 
@@ -460,9 +471,14 @@ var Minigun = function(gunPosition) {
         var that = this;
 
 
-        if (game.power > 0) {
+        var curEnergy = that.playerShip.currentEnergy();
 
-            game.setPower(game.power - 2.5);
+        if (curEnergy > 0) {
+
+            var newEnergy = curEnergy - 2.5;
+            that.playerShip.currentEnergy(newEnergy);
+            game.displayEnergy(newEnergy);
+
 
             var $newBulletSpan = $("<span class='bullet'></span>");
             $newBulletSpan.css({
@@ -471,15 +487,12 @@ var Minigun = function(gunPosition) {
             });
             $("#gameContainer").append($newBulletSpan);
 
-
             this.htmlElement = $newBulletSpan;
 
             $newBulletSpan.isMoving = true;
 
             var oldTimestamp, lastCollisionChecked;
             var animationId;
-
-
 
             var animate = function(currentTimestamp) {
 
@@ -536,7 +549,7 @@ var Minigun = function(gunPosition) {
             };
             animationId = window.requestAnimationFrame(animate);
 
-         }
+        }
         else {
             if (!this.playerShip.minigunsJammed) {
                 this.playerShip.jamMiniguns();

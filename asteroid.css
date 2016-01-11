@@ -142,9 +142,9 @@ body>div {
 }
 
 #wip span {
-	
+
 	font-size: 30px;
-	
+
 }
 /******************************************************************************
  **									== MENU ==
@@ -496,7 +496,7 @@ body>div {
     text-align: center;
     line-height: 84px;
     font-family: "Neuropol";
-    font-size: 28px;
+    font-size: 22px;
     color: red;
     padding: 0;
     margin: 0;
@@ -1041,10 +1041,10 @@ tr:nth-of-type(3) span{
 
 #resumeBody {
 
-   
+
 	display: table-row;
 	height: 60%;
-	
+
 }
 
 
@@ -1129,7 +1129,7 @@ tr:nth-of-type(3) span{
 	width: 100%;
 	overflow: hidden;
 	cursor: pointer;
-	padding-left: 35px;	
+	padding-left: 35px;
 }
 
 .resumeSide ul li:nth-child(even) {
@@ -1154,13 +1154,13 @@ tr:nth-of-type(3) span{
 	color: #ff8400;
 }
 
-.resumeSide ul hr{ 
-	border: 0; 
-	height: 2px; 
+.resumeSide ul hr{
+	border: 0;
+	height: 2px;
 	width: 80%;
 	margin: 0;
 	padding: 0;
-	background-image: linear-gradient(to right, rgba(141, 237, 240, 0.75), rgba(141, 237, 240, 0.75), rgba(0, 0, 0, 0)); 
+	background-image: linear-gradient(to right, rgba(141, 237, 240, 0.75), rgba(141, 237, 240, 0.75), rgba(0, 0, 0, 0));
 }
 
 
@@ -1180,9 +1180,9 @@ tr:nth-of-type(3) span{
     border: 2px solid #00fdfa;
     border-radius: 20px;
     box-shadow: 0 0 5px 5px rgba(141, 237, 240, 0.2);
-    
-    display: block; 
-    
+
+    display: block;
+
     margin: 0;
     padding: 0;
     position: absolute;
@@ -1190,7 +1190,12 @@ tr:nth-of-type(3) span{
     left: 2%;
     height: 100%;
     top: 3000px;
+    overflow: hidden;
 }
+
+/*#resumeBodyCenter > div:hover {
+    overflow-y: scroll;
+}*/
 
 
 #resumePersonalData {
@@ -1198,21 +1203,21 @@ tr:nth-of-type(3) span{
     padding: 0;
 	width: 96%;
 	height: 100%;
-    
+
     background-color: rgba(0, 255, 255, 0.09);
     border: 2px solid #00fdfa;
     border-radius: 20px;
     box-shadow: 0 0 5px 5px rgba(141, 237, 240, 0.2);
-    text-align:center; 
-    
+    text-align:center;
+
     position: absolute;
     top: 0;
-   
+
 	left: 500px;
 
 }
 #resumePersonalData > div {
-	margin:auto; 
+	margin:auto;
 	vertical-align:middle;
 	text-align:left;
 	color: white;
@@ -1266,13 +1271,31 @@ tr:nth-of-type(3) span{
 }*/
 
 #resumeSkills {
-	display: block;
-	/*-webkit-column-count: 3; /* Chrome, Safari, Opera */
-    /*-moz-column-count: 3; /* Firefox */
-    /*column-count: 3;*/
+	display: none;
     width: 100%;
 	height: 100%;
-	padding: 50px;
+
+}
+
+#resumeSkills > div {
+    display: table-row;
+    width: 60%;
+}
+
+.resumeSkillContainer {
+    display: table-cell;
+    width: 25%;
+    padding-top: 30px;
+}
+
+.resumeSkillCircle {
+    margin: 0 auto;
+    width: 80px;
+}
+
+.resumeSkillContainer p {
+    text-align: center;
+    font-weight: bold;
 }
 
 #resumeWorks {

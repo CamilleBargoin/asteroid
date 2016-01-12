@@ -58,7 +58,10 @@ var BonusGenerator = function() {
                          that.destroy();
                     }
 
-                    spaceshipHit = that.checkCollision(elements.spaceships);
+                    spaceshipHit = that.checkCollision({
+                        elements: elements.spaceships,
+                        single: true
+                    });
 
                     if(spaceshipHit) {
                         that.isMoving = false;

@@ -60,7 +60,6 @@ var Spaceship = function() {
             };
             moveRightAnimationId = window.requestAnimationFrame(animate);
         }
-
     };
 
 
@@ -209,6 +208,10 @@ var Spaceship = function() {
         }
     };
 
+    this.shootLaser = function() {
+        this.weapons.rockets[0].fire();
+    };
+
 
 
     /**
@@ -222,7 +225,7 @@ var Spaceship = function() {
 
 
             intervalFireID = setInterval(function() {
- 
+
                 $("<audio></audio>")
                     .attr("src", "./sound/laser08.mp3")
                     .prop("volume", 0.2)
@@ -329,8 +332,6 @@ var Spaceship = function() {
         this.isMovingUp = false;
         this.isMovingDown = false;
 
-        //TODO: EXPLOSION
-        //
         asteroidGen.stop();
         game.endGame();
 
@@ -370,6 +371,96 @@ var Spaceship = function() {
 
         animateSprite();
     };
+
+};
+
+
+
+var Laser = function() {
+
+    this.power = 10000;
+    this.playerShip = playerShip;
+    var that = this;
+
+    this.fire = function() {
+
+        var energy = this.playerShip.currentEnergy();
+
+        if (energy >= 300 && game.isPaused == false)
+        {
+            this.playerShip.currentEnergy(energy - 300);
+            game.displayEnergy(energy - 300);
+
+            var $newLaserSpan = $("<div class='laser'><span class='laserHead'></span><span class='laserTail'</span></div>");
+            $newLaserSpan.css({
+                left: this.playerShip.htmlElement.position().left + 110 +"px",
+                top: this.playerShip.htmlElement.position().top +  25  + "px",
+                display: 'none'
+            });
+
+            $("#gameContainer").append($newLaserSpan);
+
+            $("#gameHud").animate({
+                top: "-20px"
+            }, 35).animate({
+                top: "20px"
+            }, 70).animate({
+                top: "-20px"
+            }, 70).animate({
+                top: "20px"
+            }, 70).animate({
+                top: "-16px"
+            }, 70).animate({
+                top: "20px"
+            }, 70).animate({
+                top: "-16px"
+            }, 70);
+
+            game.isPaused = true;
+
+            $newLaserSpan.show().children('span:last').animate({
+                width: "100%"
+            }, 200, function() {
+                setTimeout(function() {
+                    $newLaserSpan.remove();
+                    game.isPaused = false;
+
+                    /*
+                    setTimeout(function() {
+                        game.displayEnergy(that.playerShip.maxEnergy());
+                        that.playerShip.currentEnergy(that.playerShip.maxEnergy());
+                    }, 4000);
+                    */
+                }, 500);
+            });
+
+
+            var asteroidsHit = that.checkCollision({
+                elements: elements.asteroids,
+                source: $newLaserSpan
+            });
+
+            if (asteroidsHit) {
+                console.log(asteroidsHit);
+                for (var i = 0; i < asteroidsHit.length; i++) {
+                    asteroidsHit[i].damage(that.power);
+                    console.log("Asteroid Hit !");
+                }
+
+
+
+            }
+
+        }
+
+
+
+
+
+
+
+    };
+
 
 };
 
@@ -425,7 +516,11 @@ var Rocket = function() {
                         console.log("Rocket Lost in Space!");
                     }
 
-                    var asteroidHit = that.checkCollision( elements.asteroids, $newRocketSpan);
+                    var asteroidHit = that.checkCollision({
+                        elements: elements.asteroids,
+                        source: $newRocketSpan,
+                        single: true
+                    });
 
                     if (asteroidHit) {
                         asteroidHit.damage(that.power);
@@ -478,11 +573,10 @@ var Minigun = function(gunPosition) {
 
         var curEnergy = that.playerShip.currentEnergy();
 
-        if (curEnergy > 0) {
+        if (curEnergy > 0 && game.isPaused == false) {
 
-            var newEnergy = curEnergy - 2.5;
-            that.playerShip.currentEnergy(newEnergy);
-            game.displayEnergy(newEnergy);
+            that.playerShip.currentEnergy(curEnergy - 2.5);
+            game.displayEnergy(curEnergy - 2.5);
 
 
             var $newBulletSpan = $("<span class='bullet'></span>");
@@ -492,7 +586,7 @@ var Minigun = function(gunPosition) {
             });
             $("#gameContainer").append($newBulletSpan);
 
-            
+
 
             this.htmlElement = $newBulletSpan;
 
@@ -526,7 +620,11 @@ var Minigun = function(gunPosition) {
 
 
                     if (deltaCollision > 60) {
-                        var asteroidHit = that.checkCollision(elements.asteroids, $newBulletSpan);
+                        var asteroidHit = that.checkCollision({
+                            elements: elements.asteroids,
+                            source: $newBulletSpan,
+                            single: true
+                        });
 
                         if (asteroidHit) {
 

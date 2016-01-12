@@ -195,7 +195,36 @@ body>div {
 	display: table-row;
 	height: 10%;
 	width: 100%;
+
 }
+
+#menuFooter > div {
+    background-color: #111111;
+    -moz-box-shadow: inset 0px 2px 5px 0px #0A0A0A;
+    -webkit-box-shadow: inset 0px 2px 5px 0px #0A0A0A;
+    -o-box-shadow: inset 0px 2px 5px 0px #0A0A0A;
+    box-shadow: inset 0px 2px 5px 0px #0A0A0A;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#0A0A0A, Direction=180, Strength=5);
+
+    height: 35px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#menuFooter > div p {
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    padding: 0 20px;
+    color: #05D4DB;
+    line-height: 35px;
+    font-size: 12px;
+    font-family: sans-serif;
+    letter-spacing: 0.15em;
+}
+
 
 #menuList {
 	display: table-row;
@@ -250,7 +279,7 @@ body>div {
     font-size: 15px;
     font-family: 'Neuropol';
     letter-spacing: 0.1em;
-    line-height: 20px;
+    line-height: 25px;
     top: 0;
     left: 0;
 }
@@ -268,7 +297,7 @@ body>div {
     text-transform: uppercase;
 }
 
-#introTyped .introHighlight {
+#introTyped .introHighlightOrange {
     color: #ff8400;
 }
 
@@ -276,8 +305,18 @@ body>div {
     color: white;
 }
 
+#introTyped .introHighlightPurple {
+    color: #719BFB;
+}
+
 #introTyped .keyboard {
-    font-family: "consolas"
+    font-family: "consolas";
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+#introTyped .introTitle2 {
+    font-size: 40px;
 }
 
 .typed-cursor{
@@ -500,6 +539,42 @@ body>div {
     color: red;
     padding: 0;
     margin: 0;
+}
+
+.laser {
+    height: 62px;
+    position: absolute;
+    z-index: 3;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    /*background: url("./img/laser.png") no-repeat;*/
+
+}
+
+.laserHead {
+    height: 62px;
+    width: 41px;
+    position: absolute;
+    z-index: 3;
+    margin: 0;
+    padding: 0;
+    background: url("./img/laserHead.png") no-repeat;
+}
+
+.laserTail {
+    height: 62px;
+    width: 0px;
+    position: absolute;
+    z-index: 3;
+    margin: 0 0 0 41px;
+    padding: 0;
+    background: url("./img/laserTail.png") repeat-x;
+    -moz-box-shadow: 0px 0px 30px 5px #96fffb;
+    -webkit-box-shadow: 0px 0px 30px 5px #96fffb;
+    -o-box-shadow: 0px 0px 30px 5px #96fffb;
+    box-shadow: 0px 0px 30px 5px #96fffb;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#96fffb, Direction=NaN, Strength=50);
 }
 
 .rocket {

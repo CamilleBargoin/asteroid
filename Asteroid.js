@@ -65,8 +65,6 @@ var AsteroidGenerator = function() {
 
                 if (delta > 30 && game.isPaused == false) {
 
-                    //$("#nbasteroid").html(elements.asteroids.length);
-
                     var currentPos = that.htmlElement.position();
 
                     that.htmlElement.css("left", (currentPos.left - 10) + "px");
@@ -77,7 +75,10 @@ var AsteroidGenerator = function() {
                          that.die();
                     }
 
-                    var spaceshipHit = that.checkCollision(elements.spaceships);
+                    var spaceshipHit = that.checkCollision({
+                        elements: elements.spaceships,
+                        single: true
+                    });
 
                     if (spaceshipHit) {
                         that.isMoving = false;
@@ -135,11 +136,6 @@ var AsteroidGenerator = function() {
                 that.die();
                 game.updateScore(that.score);
             });
-
-            $("<audio></audio>")
-                .attr("src", "./sound/explosion02.mp3")
-                .prop("volume", 0.6)
-                .trigger("play");
         };
 
 
@@ -198,35 +194,48 @@ var AsteroidGenerator = function() {
 
     var generationIntervalId = null;
 
-    this.start = function() {
+    this.start = function(delay) {
         var that = this;
 
-        generationIntervalId = setInterval(function() {
-
-            var newAsteroid = null;
-            var randomAsteroid = Math.floor(Math.random() * 3);
-
-            if (randomAsteroid == 0)
-                newAsteroid = new smallAsteroid();
-            else if (randomAsteroid == 1)
-                newAsteroid = new mediumAsteroid();
-            else if (randomAsteroid == 2)
-                newAsteroid = new largeAsteroid();
+        var startDelay = (delay) ? delay : 3000;
 
 
-            if (newAsteroid) {
-                that.asteroidId++;
+        this.launchAsteroid = function(newDelay) {
 
-                newAsteroid.id = that.asteroidId;
+            generationIntervalId = setTimeout(function() {
 
-                newAsteroid.createElement();
-                newAsteroid.move();
-                elements.asteroids.push(newAsteroid);
-            }
+                var newAsteroid = null;
+                var randomAsteroid = Math.floor(Math.random() * 3);
+
+                if (randomAsteroid == 0)
+                    newAsteroid = new smallAsteroid();
+                else if (randomAsteroid == 1)
+                    newAsteroid = new mediumAsteroid();
+                else if (randomAsteroid == 2)
+                    newAsteroid = new largeAsteroid();
 
 
-        }, 3000);
+                if (newAsteroid) {
+                    that.asteroidId++;
 
+                    newAsteroid.id = that.asteroidId;
+
+                    newAsteroid.createElement();
+                    newAsteroid.move();
+                    elements.asteroids.push(newAsteroid);
+                }
+
+                generationIntervalId = setTimeout(function() {
+                    that.launchAsteroid(newDelay);
+                }, newDelay);
+
+            }, newDelay);
+
+
+
+        };
+
+        this.launchAsteroid(startDelay);
     };
 
     this.stop = function() {

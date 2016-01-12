@@ -198,6 +198,22 @@
                     el.css("background-image", "url('./img/gui/main_button_1.png')");
                 }, 200);
             });
+
+            $("#menuFooter > div").mouseenter(function() {
+                $(this).animate({
+                    height: "120px"
+                }, 200);
+                $('#pwet').animate({
+                    fontSize: "20px",
+                }, 200);
+            }).mouseout(function() {
+                $(this).animate({
+                    height: "35px"
+                }, 200);
+                $('#pwet').animate({
+                    fontSize: "12px",
+                }, 200);
+            });
         };
 
 
@@ -223,7 +239,7 @@
 
                 $introTyped.typed({
                     stringsElement: $('#introtext'),
-                    typeSpeed: 30,
+                    typeSpeed: 0.1,
                     cursorChar: "|",
                     callback: function() {
                         $("#endIntroButton").html("Commencer ->");
@@ -256,9 +272,9 @@
             playerShip.showFlame();
             elements.spaceships[0] = playerShip;
             // Starting weapons
-            playerShip.weapons.rockets.push(new Rocket());
-            playerShip.weapons.rockets.push(new Rocket());
-            playerShip.weapons.rockets.push(new Rocket());
+            playerShip.weapons.rockets.push(new Laser());
+            //playerShip.weapons.rockets.push(new Rocket());
+            //playerShip.weapons.rockets.push(new Rocket());
             playerShip.weapons.miniguns.push(new Minigun(17));
             playerShip.weapons.miniguns.push(new Minigun(91));
 
@@ -434,7 +450,8 @@
                 }
 
                 if (e.keyCode == 13 || e.keyCode == 69) {
-                   playerShip.shootRocket();
+                   //playerShip.shootRocket();
+                   playerShip.shootLaser();
                 }
             }
 
@@ -785,6 +802,22 @@ console.log(sortedScores);
             if (score%50000 == 0)
                 this.displayKillCount();
 
+
+            if (score >= 100000) {
+                asteroidGen.stop();
+                asteroidGen.start(2000);
+            }
+
+            if (score >= 300000) {
+                asteroidGen.stop();
+                asteroidGen.start(1000);
+            }
+
+            if (score >= 600000) {
+                asteroidGen.stop();
+                asteroidGen.start(500);
+            }
+
             this.checkNewSkill();
         };
 
@@ -904,6 +937,7 @@ console.log(sortedScores);
         Spaceship.prototype = new Utils();
         Minigun.prototype = new Utils();
         Rocket.prototype = new Utils();
+        Laser.prototype = new Utils();
 
 
         game = new Game();

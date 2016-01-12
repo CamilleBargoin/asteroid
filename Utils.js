@@ -1,17 +1,25 @@
 var Utils = function() {
 
-    this.checkCollision = function(elements, source) {
+    //this.checkCollision = function(elements, source) {
+    this.checkCollision = function(args) {
+        var sourcePos = (args.source) ? this.getPosition(args.source) : this.getPosition();
+        var multipleHits = (args.single) ? null : [];
 
-        var sourcePos = (source) ? this.getPosition(source) : this.getPosition();
-
-        for (var i = 0; i < elements.length; i++)
+        for (var i = 0; i < args.elements.length; i++)
         {
 
-            var currentPos = elements[i].getPosition();
+            var currentPos = args.elements[i].getPosition();
             if (this.comparePositions(sourcePos[0], currentPos[0]) && this.comparePositions(sourcePos[1], currentPos[1])) {
-                return elements[i];
+                if (args.single)
+                    return args.elements[i];
+                else
+                    multipleHits.push(args.elements[i]);
             }
         }
+
+        if (multipleHits != null)
+            return multipleHits;
+
         return false;
     };
 
@@ -33,7 +41,6 @@ var Utils = function() {
         r2 = p1[0] < p2[0] ? p2 : p1;
         return r1[1] > r2[0] || r1[0] === r2[0];
     };
-
 
     this.explodeAnimate = function(object, callback) {
 
@@ -114,8 +121,6 @@ var Utils = function() {
                 else {
                     $explosion.css("backgroundPosition", "left " + explosionAnimation[sequencePosition].x + "px top " + explosionAnimation[sequencePosition].y + "px");
 
-                    console.log($explosion.css("backgroundPosition"));
-
                     $explosion.css({
                         width: explosionAnimation[sequencePosition].width + "px",
                         height: explosionAnimation[sequencePosition].height + "px"
@@ -144,7 +149,7 @@ var Utils = function() {
      **/
     this.blink = function(times, speed) {
 
-        for(var i = 0; i < times; i++) 
+        for(var i = 0; i < times; i++)
             this.htmlElement.fadeOut(speed).fadeIn(speed);
     };
 

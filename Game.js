@@ -543,14 +543,17 @@
                    var sortedScores = [];
 
                    for(var i = 0; i < namesAndScores.length; i++) {
-                        var line = namesAndScores[i].split(":");
+                        if (namesAndScores[i] !="") {
+                            var line = namesAndScores[i].split(":");
 
-                        sortedScores.push({
-                            name: line[0],
-                            score: line[1]
-                        });
+                            sortedScores.push({
+                                name: line[0],
+                                score: parseInt(line[1])
+                            });
+                        }
+                        
                    }
-
+console.log(sortedScores);
                     sortedScores.sort(function (a, b) {
                         if (a.score < b.score)
                           return 1;

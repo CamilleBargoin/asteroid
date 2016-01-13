@@ -1,18 +1,26 @@
+/**
+ * BonusGenerator Factory
+ * The factory creates bonuses every x seconds for the player to grab
+ * For now, the only bonus is an Energy Bonus
+ */
 var BonusGenerator = function() {
 
-    var bonusId = 0;
-
+    /**
+     * Bonus Constructor Function
+     */
     var Bonus = function(args) {
 
         this.isMoving = false;
         this.htmlElement = null;
         this.className = (args.className) ? args.className : "";
         this.src = (args.src) ? args.src : "";
-        this.rgba = args.rgba;
 
+        /**
+         * creates the HTML element and adds it to the DOM
+         */
         this.createElement = function() {
-            this.htmlElement = $("<img></img>");
 
+            this.htmlElement = $("<img></img>");
             this.htmlElement.css({
                 top: (Math.random() * window.innerHeight - 100) + 100 + "px",
                 left: window.innerWidth + "px"
@@ -24,6 +32,10 @@ var BonusGenerator = function() {
            $("#gameContainer").append(this.htmlElement);
         };
 
+        /**
+         * Moves the Bonus from the right side of the screen to the left
+         * The Bonus element also randomly moves up or down every 1200ms
+         */
         this.move = function() {
             var that = this;
             var oldTimestampX, oldTimestampY;
@@ -43,23 +55,26 @@ var BonusGenerator = function() {
                 if (deltaX > 30 && game.isPaused == false) {
 
                     currentPos = that.htmlElement.position();
+
+                    // Moves Left
                     that.htmlElement.css("left", (currentPos.left - 7) + "px");
 
-
+                    // Moves Up or Down
                    if (randomSign > 0 && currentPos.top >= window.innerHeight - 64 || randomSign < 0 && currentPos.top <= 0){
                         randomSign  = randomSign * -1;
                     }
-
                     that.htmlElement.css("top", (currentPos.top + (5 * randomSign)) + "px");
 
+                    // Detects when Bonus leaves the screen
                     if(currentPos.left <= 0 ) {
                          that.isMoving = false;
                          console.log("You just missed the " + that.name + " Bonus ! :'(");
                          that.destroy();
                     }
 
+                    // Collision detection with Spaceship
                     spaceshipHit = that.checkCollision({
-                        elements: elements.spaceships,
+                        elements: game.elements.spaceships,
                         single: true
                     });
 
@@ -67,9 +82,9 @@ var BonusGenerator = function() {
                         that.isMoving = false;
                         that.destroy();
                         console.log("Congratulations! You just captured the " + that.name + " Bonus !");
-                        var newEnergy = elements.spaceships[0].maxEnergy() + 100;
-                        elements.spaceships[0].maxEnergy(newEnergy);
-                        elements.spaceships[0].currentEnergy(newEnergy);
+                        var newEnergy = game.elements.spaceships[0].maxEnergy() + 100;
+                        game.elements.spaceships[0].maxEnergy(newEnergy);
+                        game.elements.spaceships[0].currentEnergy(newEnergy);
                         game.displayEnergy(newEnergy);
 
                         $("<audio></audio>")
@@ -81,7 +96,7 @@ var BonusGenerator = function() {
                     oldTimestampX = currentTimestamp;
                 }
 
-
+                // Determine if the Bonus is moving up or down
                 if (deltaY > 1200) {
                     randomSign = Math.random() < 0.5 ? -1 : 1;
                     oldTimestampY = currentTimestamp;
@@ -96,21 +111,24 @@ var BonusGenerator = function() {
 
 
         /**
-         * [destroy description]
-         * @return {[type]} [description]
+         * Removes the Bonus from DOM
          */
         this.destroy = function() {
             if (this.htmlElement)
                 this.htmlElement.remove();
-
         };
     };
 
+    // Bonus Object inherits from Utils Object
     Bonus.prototype = new Utils();
 
     var bonusGenerationIntervalId = null;
 
 
+    /**
+     * Launches the Bonus Generator
+     * A new Bonus is created every 30 sec
+     */
     this.start = function() {
         var that = this;
 
@@ -119,8 +137,7 @@ var BonusGenerator = function() {
             that.energyBonus = new Bonus({
                 name: "energy",
                 className: "bonus",
-                src: "./img/energy.png",
-                rgba: "244,100,47,0.8"
+                src: "./img/energy.png"
             });
             that.energyBonus.createElement();
             that.energyBonus.move();
@@ -131,8 +148,7 @@ var BonusGenerator = function() {
 
 
     this.stop = function() {
-
+        clearInterval(bonusGenerationIntervalId);
     };
-
 
 };

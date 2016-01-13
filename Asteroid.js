@@ -1,19 +1,21 @@
-
-
-
-
+/**
+ *  AsteroidGenerator Factory
+ *  The factory creates Asteroid Object every x seconds
+ */
 var AsteroidGenerator = function() {
 
     this.asteroidId = 0;
 
+
+    /**
+     * Asteroid Constructor Function
+     */
     var Asteroid = function(htmlElement) {
 
         this.health = 100;
         this.htmlElement = htmlElement;
         this.isMoving = false;
-        var asteroidnimationRequestId = null;
         this.destroyed = false;
-
 
 
         this.explosionAnimation = [{
@@ -47,16 +49,33 @@ var AsteroidGenerator = function() {
         }];
 
         /**
-         * [move description]
-         * @return {[type]} [description]
+         *  Creates the HTML element and adds it to the DOM
+         */
+        this.createElement = function() {
+            this.htmlElement = $("<span></span>");
+
+            this.htmlElement.css({
+                width: this.width,
+                height: this.height,
+                background: "url('./img/asteroids/" + this.filename + "')",
+                left: window.innerWidth + "px",
+                top: (Math.random() * ((window.innerHeight - 160) - 60) + 60) + "px",
+                position: "absolute"
+            });
+
+            $("#gameContainer").append(this.htmlElement);
+        };
+
+        /**
+         * Moves the Asteroid from the right side of the scren to the left
+         * Uses requestAnimationFrame, and tests for collision with the
+         * Spaceship every 30ms
          */
         this.move = function() {
 
             var that = this;
             var oldTimestamp;
             this.isMoving = true;
-
-
 
             var animate = function(currentTimestamp) {
 
@@ -65,18 +84,20 @@ var AsteroidGenerator = function() {
 
                 if (delta > 30 && game.isPaused == false) {
 
+                    // moves left
                     var currentPos = that.htmlElement.position();
-
                     that.htmlElement.css("left", (currentPos.left - 10) + "px");
 
+                    // check for Asteroid leaving the screen
                     if(currentPos.left <= 0) {
                          that.isMoving = false;
                          console.log("Asteroid has left the screen");
                          that.die();
                     }
 
+                    // Check for collisoin with Spaceship
                     var spaceshipHit = that.checkCollision({
-                        elements: elements.spaceships,
+                        elements: game.elements.spaceships,
                         single: true
                     });
 
@@ -97,14 +118,8 @@ var AsteroidGenerator = function() {
         };
 
 
-        this.pause = function() {
-
-        };
-
-
         /**
-         * [die description]
-         * @return {[type]} [description]
+         *  Removes the Asteroid from the DOM and from the game elements array
          */
         this.die = function() {
 
@@ -114,18 +129,18 @@ var AsteroidGenerator = function() {
                 this.htmlElement.remove();
             }
 
-            //removes Asteroid from the global array Asteroids
-             for(var i = 0; i < elements.asteroids.length; i++) {
-                if(elements.asteroids[i].id == this.id) {
-                    elements.asteroids[i] = null;
-                    elements.asteroids.splice(i, 1);
+            //removes Asteroid from the game array elements.asteroids
+             for(var i = 0; i < game.elements.asteroids.length; i++) {
+                if(game.elements.asteroids[i].id == this.id) {
+                    game.elements.asteroids[i] = null;
+                    game.elements.asteroids.splice(i, 1);
                 }
              }
-
-
-
         };
 
+        /**
+         * Launches the explosion animation and then calls the die method
+         */
         this.explode = function() {
 
             var that = this;
@@ -139,6 +154,9 @@ var AsteroidGenerator = function() {
         };
 
 
+        /**
+         * Deals damage to the Asteroid
+         */
         this.damage = function(power) {
             this.health -= power;
 
@@ -148,23 +166,16 @@ var AsteroidGenerator = function() {
             }
         };
 
-        this.createElement = function() {
-            this.htmlElement = $("<span></span>");
-
-            this.htmlElement.css({
-                width: this.width,
-                height: this.height,
-                background: "url('./img/asteroids/" + this.filename + "')",
-                left: window.innerWidth + "px",
-                top: (Math.random() * ((window.innerHeight - 160) - 60) + 60) + "px",
-                position: "absolute"
-            });
-
-            $("#gameContainer").append(this.htmlElement);
-        };
     };
+
+    // Asteroid Object inherits from Utils Object
     Asteroid.prototype = new Utils();
 
+
+    /**
+     * smallAsteroid, mediumAsteroid and largeAsteroid Constructor functions
+     * the objects inherit from the Asteroid Object
+     */
     var smallAsteroid = function() {
         this.width=  120;
         this.height = 100;
@@ -194,11 +205,15 @@ var AsteroidGenerator = function() {
 
     var generationIntervalId = null;
 
+    /**
+     * Launches the Asteroid Generator
+     * A new random Asteroid (small, medium or large)
+     * is generated every [delay] seconds
+     */
     this.start = function(delay) {
         var that = this;
 
         var startDelay = (delay) ? delay : 3000;
-
 
         this.launchAsteroid = function(newDelay) {
 
@@ -214,7 +229,6 @@ var AsteroidGenerator = function() {
                 else if (randomAsteroid == 2)
                     newAsteroid = new largeAsteroid();
 
-
                 if (newAsteroid) {
                     that.asteroidId++;
 
@@ -222,7 +236,7 @@ var AsteroidGenerator = function() {
 
                     newAsteroid.createElement();
                     newAsteroid.move();
-                    elements.asteroids.push(newAsteroid);
+                    game.elements.asteroids.push(newAsteroid);
                 }
 
                 generationIntervalId = setTimeout(function() {
@@ -230,9 +244,6 @@ var AsteroidGenerator = function() {
                 }, newDelay);
 
             }, newDelay);
-
-
-
         };
 
         this.launchAsteroid(startDelay);
@@ -241,9 +252,4 @@ var AsteroidGenerator = function() {
     this.stop = function() {
         clearInterval(generationIntervalId);
     };
-
 };
-
-//Asteroid.prototype = new Utils();
-
-

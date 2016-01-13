@@ -1,15 +1,30 @@
+/**
+ * Utils Constructor function
+ * A selection of useful methods shared by other Objects
+ */
 var Utils = function() {
 
-    //this.checkCollision = function(elements, source) {
+
+    /**
+     * Checks for collision between objects
+     * the argurment is an object containing:
+     *     - source (optional): the object from wich the collision will be checked
+     *     - single (optional): if set to true, the method will stops after detecting the
+     *                          collision
+     *     - elements (required): an array of objects to loop
+     */
     this.checkCollision = function(args) {
         var sourcePos = (args.source) ? this.getPosition(args.source) : this.getPosition();
         var multipleHits = (args.single) ? null : [];
 
+        // looping throught the elements array to check for collision
         for (var i = 0; i < args.elements.length; i++)
         {
-
             var currentPos = args.elements[i].getPosition();
             if (this.comparePositions(sourcePos[0], currentPos[0]) && this.comparePositions(sourcePos[1], currentPos[1])) {
+
+                // if single is set, the method returns the element hit
+                // else, the element is saved in an array returned later
                 if (args.single)
                     return args.elements[i];
                 else
@@ -23,6 +38,9 @@ var Utils = function() {
         return false;
     };
 
+    /**
+     *  returns the coordinates of an element
+     */
     this.getPosition = function(source) {
 
         var element = (source) ? source : this.htmlElement;
@@ -34,7 +52,10 @@ var Utils = function() {
         return [ [ pos.left, pos.left + width ], [ pos.top, pos.top + height ] ];
     };
 
-
+    /**
+     *  checks if two elements are overlapping each others
+     *  based on their coordinates
+     */
     this.comparePositions = function(p1, p2) {
         var r1, r2;
         r1 = p1[0] < p2[0] ? p1 : p2;
@@ -42,6 +63,9 @@ var Utils = function() {
         return r1[1] > r2[0] || r1[0] === r2[0];
     };
 
+    /**
+     * Adds an explosion animation
+     */
     this.explodeAnimate = function(object, callback) {
 
         var explosionAnimation = [{
@@ -144,9 +168,8 @@ var Utils = function() {
 
 
     /**
-     * Purpose: blink a page element
-     * Preconditions: the element you want to apply the blink to, the number of times to blink the element (or -1 for infinite times), the speed of the blink
-     **/
+     * Makes the Object blink based on two parameters (time and speed)
+     */
     this.blink = function(times, speed) {
 
         for(var i = 0; i < times; i++)

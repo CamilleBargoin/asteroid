@@ -1,33 +1,29 @@
 /**
- * [Spaceship description]
+ * Spaceship Constructor function
  */
 var Spaceship = function() {
 
-    var initialPos = {
-        top: 500,
-        left: 800
-    };
-
-    var lives = 5;
-    var level = 0;
-    var health = 100;
-    var maxEnergy = 100, currentEnergy = 100;
+    var health = maxEnergy = currentEnergy = 100;
     var models = ["spaceship_01", "spaceship_02", "spaceship_03"];
 
     this.htmlElement = null;
-    this.isMovingRight = false;
-    this.isMovingLeft = false;
-    this.isMovingUp = false;
-    this.isMovingDown = false;
+
+    this.moveRightAnimationId = this.moveLeftAnimationId = this.moveUpAnimationId = this.moveDownAnimationId = null;
+    this.intervalFireID = null;
+
+    this.isMovingRight = this.isMovingLeft = this.isMovingUp = this.isMovingDown = false;
     this.isFiring = false;
-    this.weapons = {
-        rockets: [],
-        miniguns: []
-    };
     this.minigunsJammed = false;
 
+    this.weapons = {
+        lasergun: [],
+        miniguns: []
+    };
 
 
+    /**
+     * creates a html element and adds it to the DOM
+     */
     this.createElement = function() {
 
         this.htmlElement = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
@@ -39,8 +35,7 @@ var Spaceship = function() {
 
 
     /**
-     * [moveRight description]
-     * @return {[type]} [description]
+     * Animates the spaceship to the right using requestAnimationFram
      */
     this.moveRight = function() {
         if (!this.isMovingRight) {
@@ -60,16 +55,15 @@ var Spaceship = function() {
                         that.htmlElement.css("left",  (that.htmlElement.position().left + 10) + "px");
                     }
                 }
-                moveRightAnimationId = window.requestAnimationFrame(animate);
+                that.moveRightAnimationId = window.requestAnimationFrame(animate);
             };
-            moveRightAnimationId = window.requestAnimationFrame(animate);
+            this.moveRightAnimationId = window.requestAnimationFrame(animate);
         }
     };
 
 
     /**
-     * [moveLeft description]
-     * @return {[type]} [description]
+     * Animates the spaceship to the left using requestAnimationFrame
      */
     this.moveLeft = function() {
         if (!this.isMovingLeft) {
@@ -88,16 +82,15 @@ var Spaceship = function() {
                         that.htmlElement.css("left",   (that.htmlElement.position().left - 10) + "px");
                 }
 
-                moveLeftAnimationId = window.requestAnimationFrame(animate);
+                that.moveLeftAnimationId = window.requestAnimationFrame(animate);
             };
-            moveLeftAnimationId = window.requestAnimationFrame(animate);
+            this.moveLeftAnimationId = window.requestAnimationFrame(animate);
         }
     };
 
 
     /**
-     * [moveUp description]
-     * @return {[type]} [description]
+     * Animates the spaceship up using requestAnimationFrame
      */
     this.moveUp = function() {
         if (!this.isMovingUp) {
@@ -119,16 +112,15 @@ var Spaceship = function() {
                     }
 
                 }
-                moveUpAnimationId = window.requestAnimationFrame(animate);
+                that.moveUpAnimationId = window.requestAnimationFrame(animate);
             };
-            moveUpAnimationId = window.requestAnimationFrame(animate);
+            this.moveUpAnimationId = window.requestAnimationFrame(animate);
         }
     };
 
 
     /**
-     * [moveDown description]
-     * @return {[type]} [description]
+     * Animates the spaceship down using requestAnimationFrame
      */
     this.moveDown = function() {
 
@@ -148,17 +140,17 @@ var Spaceship = function() {
                     if (position.top < window.innerHeight - 90) {
                         checkBottomResume(position);
                         that.htmlElement.css("top",  (position.top + 10) + "px");
-
-
                     }
                 }
-                moveDownAnimationId = window.requestAnimationFrame(animate);
+                that.moveDownAnimationId = window.requestAnimationFrame(animate);
             };
-            moveDownAnimationId = window.requestAnimationFrame(animate);
+            this.moveDownAnimationId = window.requestAnimationFrame(animate);
         }
     };
 
-
+    /**
+     * Checks if the spaceship is entering in the Bottom resume zone and hides it
+     */
     var checkBottomResume = function(position) {
         var lock = false;
         if(position.top  >=  (window.innerHeight - 150 - 90) && !lock) {
@@ -178,7 +170,9 @@ var Spaceship = function() {
         }
     };
 
-
+    /**
+     * Getter/Setter for the currentEnergy property
+     */
     this.currentEnergy = function(newValue) {
         if (typeof newValue != 'undefined')
             currentEnergy = newValue;
@@ -186,6 +180,9 @@ var Spaceship = function() {
             return currentEnergy;
     };
 
+    /**
+     * Getter/Setter for the maxEnergy
+     */
     this.maxEnergy = function(newValue) {
         if (typeof newValue != 'undefined')
             maxEnergy = newValue;
@@ -194,41 +191,31 @@ var Spaceship = function() {
     };
 
     /**
-     * [shootRocket description]
-     * @return {[type]} [description]
+     * Getter for the health property
      */
-    this.shootRocket = function() {
-
-        if (this.weapons.rockets.length > 0) {
-            this.weapons.rockets[this.weapons.rockets.length - 1].fire();
-            this.weapons.rockets.pop();
-            $("#hud_rockets").innerHTML = this.weapons.rockets.length;
-            if (this.weapons.rockets.length === 0) {
-                $("#hud_rocketsIcon").className = "hud_dead";
-                $("#hud_rockets").className = "hud_dead";
-            }
-        } else {
-            alert("no more !");
-        }
-    };
-
-    this.shootLaser = function() {
-        this.weapons.rockets[0].fire();
+    this.getHealth = function() {
+        return health;
     };
 
 
 
     /**
-     * [fireMiniguns description]
-     * @return {[type]} [description]
+     *  Calls the Laser Object fire method
+     */
+    this.shootLaser = function() {
+        this.weapons.lasergun[0].fire();
+    };
+
+
+    /**
+     *  If the miniguns aren't jammed, calls the Miniguns fire method
      */
     this.fireMiniguns = function() {
         if (!this.isFiring && !this.minigunsJammed) {
             this.isFiring = true;
             var that = this;
 
-
-            intervalFireID = setInterval(function() {
+            this.intervalFireID = setInterval(function() {
 
                 $("<audio></audio>")
                     .attr("src", "./sound/laser08.mp3")
@@ -249,14 +236,18 @@ var Spaceship = function() {
                     .trigger("play");
             }
         }
-            
     };
 
+    /**
+     *  Sets the minigunsJammed property to true and displays a message for the player
+     *  Afrer 2 seconds, the minigunsJammed property is set back to false and the
+     *  spaceship energy is set back to its max
+     */
     this.jamMiniguns = function() {
         console.log("Oh No! The Miniguns are jammed !");
         this.minigunsJammed = true;
         var that = this;
-        clearInterval(intervalFireID);
+        clearInterval(this.intervalFireID);
 
         game.displayAlert("Energie Epuisée!");
 
@@ -268,14 +259,11 @@ var Spaceship = function() {
         }, 2000);
     };
 
-
-
-
-    this.getHealth = function() {
-        return health;
-    };
-
-
+    /**
+     * Updates the health property with the modifier argument
+     * and updates the health displayed on screen and its style
+     * TODO: move the display part / styling out of Spaceship Object
+     */
     this.updateHealth = function(modifier) {
         health += modifier;
 
@@ -317,39 +305,12 @@ var Spaceship = function() {
             });
             this.die();
         }
-
-        if (modifier < 0) {
-
-            $overlay = $("<div class='takeDamageOverlay'></div>");
-            $("#gameContainer").append($overlay);
-
-            $overlay.fadeOut('fast').fadeIn('fast').fadeOut('fast', function() {
-                $(this).remove();
-            });
-
-        }
     };
 
-
-
     /**
-     * [displayInfo description]
-     * @return {[type]} [description]
-     */
-    this.displayInfo = function() {
-        console.log("New Player has:");
-        console.log("  - " + lives + " lives left");
-        console.log("  - " + this.weapons.rockets.length + " rockets left");
-        console.log("  - infinite Minigun ammo");
-    };
-
-
-    /**
-     * [die description]
-     * @return {[type]} [description]
+     * Kills the Spaceship and calls the endGame method
      */
     this.die = function() {
-
 
         this.isMovingLeft = false;
         this.isMovingRight = false;
@@ -358,22 +319,29 @@ var Spaceship = function() {
 
         asteroidGen.stop();
         game.endGame();
-
     };
 
+    /**
+     *  deals damage to the Spaceship
+     */
+    this.damage = function(damage) {
 
-    this.addMoreRockets = function () {
-        this.weapons.rockets.push(new Rocket());
-        $("#hud_rockets").html(this.weapons.rockets.length);
-    };
+        var newDamage = (damage) ? damage : -25;
+        this.updateHealth(newDamage);
 
-    this.damage = function() {
-        this.updateHealth(-25);
+        $overlay = $("<div class='takeDamageOverlay'></div>");
+        $("#gameContainer").append($overlay);
+
+        $overlay.fadeOut('fast').fadeIn('fast').fadeOut('fast', function() {
+            $(this).remove();
+        });
 
         this.blink(3, 140);
     };
 
-
+    /**
+     * Adds flames for the Spaceship and animates them
+     */
     this.showFlame = function() {
         var $flameLeft = $("<span class='spaceshipFlame'></span>");
         $flameLeft.css("top", "11px");
@@ -395,35 +363,43 @@ var Spaceship = function() {
 
         animateSprite();
     };
-
 };
 
 
-
+/**
+ * Laser Constructor function
+ */
 var Laser = function() {
 
     this.power = 10000;
-    this.playerShip = playerShip;
     var that = this;
 
+
+    /**
+     * Fires the Laser Beam if energy is at least of 300
+     * creates the html element and adds it to the dom
+     * detects the asteroids hit
+     */
     this.fire = function() {
 
-        var energy = this.playerShip.currentEnergy();
+        var playerShip = game.elements.spaceships[0];
+        var energy = playerShip.currentEnergy();
 
         if (energy >= 300 && game.isPaused == false)
         {
-            this.playerShip.currentEnergy(energy - 300);
+            playerShip.currentEnergy(energy - 300);
             game.displayEnergy(energy - 300);
 
+            // creates html element
             var $newLaserSpan = $("<div class='laser'><span class='laserHead'></span><span class='laserTail'</span></div>");
             $newLaserSpan.css({
-                left: this.playerShip.htmlElement.position().left + 107 +"px",
-                top: this.playerShip.htmlElement.position().top +  21  + "px",
+                left: playerShip.htmlElement.position().left + 107 +"px",
+                top: playerShip.htmlElement.position().top +  21  + "px",
                 display: 'none'
             });
-
             $("#gameContainer").append($newLaserSpan);
 
+            // animates the HUD to create a wobbling effect
             $("#gameHud").animate({
                 top: "-20px"
             }, 35).animate({
@@ -442,25 +418,20 @@ var Laser = function() {
 
             game.isPaused = true;
 
+            // animates the laser and then removes it
             $newLaserSpan.show().children('span:last').animate({
                 width: "100%"
             }, 200, function() {
                 setTimeout(function() {
                     $newLaserSpan.remove();
                     game.isPaused = false;
-
-                    /*
-                    setTimeout(function() {
-                        game.displayEnergy(that.playerShip.maxEnergy());
-                        that.playerShip.currentEnergy(that.playerShip.maxEnergy());
-                    }, 4000);
-                    */
                 }, 500);
             });
 
 
+            // Check for asteroid collisions
             var asteroidsHit = that.checkCollision({
-                elements: elements.asteroids,
+                elements: game.elements.asteroids,
                 source: $newLaserSpan
             });
 
@@ -470,9 +441,6 @@ var Laser = function() {
                     asteroidsHit[i].damage(that.power);
                     console.log("Asteroid Hit !");
                 }
-
-
-
             }
 
         } else {
@@ -483,13 +451,6 @@ var Laser = function() {
                     .trigger("play");
             }
         }
-
-
-
-
-
-
-
     };
 
 
@@ -498,131 +459,47 @@ var Laser = function() {
 
 
 /**
- * [Rocket description]
- */
-var Rocket = function() {
-
-    this.speed = 8;
-    this.power = 100;
-
-    this.playerShip = playerShip;
-    this.isMoving = false;
-    var playerCraftPos = null;
-
-
-    this.fire = function() {
-
-
-            this.isMoving = true;
-
-            var $newRocketSpan = $("<span class='rocket'></span>");
-            $newRocketSpan.css({
-                left: this.playerShip.htmlElement.position().left + 105 +"px",
-                top: this.playerShip.htmlElement.position().top +  45  + "px"
-            });
-
-            $("#gameContainer").append($newRocketSpan);
-
-            var that = this;
-            var animationId;
-            var oldTimestamp;
-
-            var animate = function(currentTimestamp) {
-                oldTimestamp = (oldTimestamp) ? oldTimestamp : currentTimestamp;
-                var delta = currentTimestamp - oldTimestamp;
-
-
-                if (delta > 30 && game.isPaused == false) {
-
-                    // check if rocket is out of screen
-                    if($newRocketSpan.position().left + 15 < window.innerWidth) {
-                        $newRocketSpan.css("left",  $newRocketSpan.position().left + that.speed + "px");
-                    }
-                    else {
-                        that.isMoving = false;
-                        if ($newRocketSpan) {
-                            $newRocketSpan.remove();
-                            $newRocketSpan = null;
-                        }
-                        console.log("Rocket Lost in Space!");
-                    }
-
-                    var asteroidHit = that.checkCollision({
-                        elements: elements.asteroids,
-                        source: $newRocketSpan,
-                        single: true
-                    });
-
-                    if (asteroidHit) {
-                        asteroidHit.damage(that.power);
-                        that.isMoving = false;
-                        if ($newRocketSpan) {
-                            $newRocketSpan.remove();
-                            $newRocketSpan = null;
-                        }
-                        console.log("Asteroid Hit !");
-                    }
-
-
-                    oldTimestamp = currentTimestamp;
-
-                }
-
-                if (that.isMoving) {
-                    animationId = window.requestAnimationFrame(animate);
-                } else {
-                    $newRocketSpan = null;
-                }
-
-            };
-            animationId = window.requestAnimationFrame(animate);
-
-
-
-
-
-    };
-};
-
-
-
-/**
- * [Minigun description]
+ * Minigun Construcor Function
+ * the gunPosition argument is needed to position the guns
+ * on both sides of the Spaceship
  */
 var Minigun = function(gunPosition) {
+
     this.speed = 20;
     this.power = 8;
-    this.playerShip = playerShip;
     this.gunPosition = gunPosition;
 
-    var playerCraftPos = null;
-
-
+    /**
+     * Fires the Minigun if the Spaceship has energy
+     * creates the html element for the bullet and adds it to the dom
+     * detects the asteroid hit
+     */
     this.fire = function() {
+        var playerShip = game.elements.spaceships[0];
         var that = this;
-
-
-        var curEnergy = that.playerShip.currentEnergy();
+        var curEnergy = playerShip.currentEnergy();
 
         if (curEnergy > 0 && game.isPaused == false) {
 
-            that.playerShip.currentEnergy(curEnergy - 2.5);
+            playerShip.currentEnergy(curEnergy - 2.5);
             game.displayEnergy(curEnergy - 2.5);
 
-
+            // creates html element
             var $newBulletSpan = $("<span class='bullet'></span>");
             $newBulletSpan.css({
-                left: this.playerShip.htmlElement.position().left + 80 +"px",
-                top: this.playerShip.htmlElement.position().top + this.gunPosition  + "px"
+                left: playerShip.htmlElement.position().left + 80 +"px",
+                top: playerShip.htmlElement.position().top + this.gunPosition  + "px"
             });
             $("#gameContainer").append($newBulletSpan);
-
-
 
             this.htmlElement = $newBulletSpan;
 
             $newBulletSpan.isMoving = true;
 
+
+            // Animates the bullet using requestAnimationFrame
+            // For performance concerns, we check for collision every
+            // 60ms instead of every 20ms (bullet speed)
             var oldTimestamp, lastCollisionChecked;
             var animationId;
 
@@ -637,7 +514,7 @@ var Minigun = function(gunPosition) {
                 if (delta > that.speed && game.isPaused == false) {
 
 
-
+                    // check if bullet is leaving screen
                     if($newBulletSpan.position().left + 15 < window.innerWidth) {
                         $newBulletSpan.css("left", $newBulletSpan.position().left + 10 + "px");
                     }
@@ -649,10 +526,10 @@ var Minigun = function(gunPosition) {
                         }
                     }
 
-
+                    // asteroid collision
                     if (deltaCollision > 60) {
                         var asteroidHit = that.checkCollision({
-                            elements: elements.asteroids,
+                            elements: game.elements.asteroids,
                             source: $newBulletSpan,
                             single: true
                         });
@@ -666,16 +543,12 @@ var Minigun = function(gunPosition) {
                             }
                         }
                         lastCollisionChecked = currentTimestamp;
-
                     }
-
-
 
                    oldTimestamp = currentTimestamp;
                 }
 
                 if ($newBulletSpan && $newBulletSpan.isMoving) {
-
                     animationId = window.requestAnimationFrame(animate);
                 }
                 else {
@@ -687,8 +560,9 @@ var Minigun = function(gunPosition) {
 
         }
         else {
-            if (!this.playerShip.minigunsJammed) {
-                this.playerShip.jamMiniguns();
+            // If Spaceship has no more energy, we jam the miniguns
+            if (!playerShip.minigunsJammed) {
+                playerShip.jamMiniguns();
             }
         }
 

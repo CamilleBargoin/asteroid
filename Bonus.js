@@ -136,5 +136,3 @@ var BonusGenerator = function() {
 
 
 };
-
-

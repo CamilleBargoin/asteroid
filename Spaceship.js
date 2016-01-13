@@ -12,6 +12,7 @@ var Spaceship = function() {
     var level = 0;
     var health = 100;
     var maxEnergy = 100, currentEnergy = 100;
+    var models = ["spaceship_01", "spaceship_02", "spaceship_03"];
 
     this.htmlElement = null;
     this.isMovingRight = false;
@@ -26,11 +27,14 @@ var Spaceship = function() {
     this.minigunsJammed = false;
 
 
+
     this.createElement = function() {
 
         this.htmlElement = $("<span id='spaceshipContainer'><span id='spaceship'></span></span>");
-
         $("#gameContainer").append(this.htmlElement);
+
+        var url = "./img/" + models[Math.floor(Math.random() * 3)] + ".png";
+        $("#spaceship").css("background-image", "url('" + url + "')");
     };
 
 
@@ -237,6 +241,15 @@ var Spaceship = function() {
 
             }, 200);
         }
+        else {
+            if (this.minigunsJammed) {
+                $("<audio></audio>")
+                    .attr("src", "./sound/laser02.mp3")
+                    .prop("volume", 0.2)
+                    .trigger("play");
+            }
+        }
+            
     };
 
     this.jamMiniguns = function() {
@@ -303,6 +316,17 @@ var Spaceship = function() {
                 backgroundPosition: "-435px -725px"
             });
             this.die();
+        }
+
+        if (modifier < 0) {
+
+            $overlay = $("<div class='takeDamageOverlay'></div>");
+            $("#gameContainer").append($overlay);
+
+            $overlay.fadeOut('fast').fadeIn('fast').fadeOut('fast', function() {
+                $(this).remove();
+            });
+
         }
     };
 
@@ -393,8 +417,8 @@ var Laser = function() {
 
             var $newLaserSpan = $("<div class='laser'><span class='laserHead'></span><span class='laserTail'</span></div>");
             $newLaserSpan.css({
-                left: this.playerShip.htmlElement.position().left + 110 +"px",
-                top: this.playerShip.htmlElement.position().top +  25  + "px",
+                left: this.playerShip.htmlElement.position().left + 107 +"px",
+                top: this.playerShip.htmlElement.position().top +  21  + "px",
                 display: 'none'
             });
 
@@ -451,6 +475,13 @@ var Laser = function() {
 
             }
 
+        } else {
+            if (energy < 300) {
+                $("<audio></audio>")
+                    .attr("src", "./sound/laser02.mp3")
+                    .prop("volume", 0.2)
+                    .trigger("play");
+            }
         }
 
 

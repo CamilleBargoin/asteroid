@@ -311,13 +311,13 @@
 
                 bonusGen = new BonusGenerator();
                 bonusGen.start();
-                $("#audioMain")[0].volume = 0.6;
+                $("#audioMain")[0].volume = 0.3;
                 $("#audioMain")[0].play();
             }, 1000);
 
 
             $(window).blur(function() {
-               // that.togglePause();
+               that.togglePause();
             });
 
         };
@@ -570,7 +570,7 @@
                         }
                         
                    }
-console.log(sortedScores);
+
                     sortedScores.sort(function (a, b) {
                         if (a.score < b.score)
                           return 1;

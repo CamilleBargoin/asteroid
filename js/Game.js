@@ -130,7 +130,7 @@ var game = null;
                     that.mute = false;
                     $("#audioMain")[0].play();
                 }
-                
+
             });
 
             // SUBMIT score and name to server side php script using jquery ajax object
@@ -239,6 +239,15 @@ var game = null;
 
             $("#intro").show();
 
+            var backgroundScroll1 = $("#backgroundScroll");
+            var backgroundScroll2 = $("#backgroundScroll2");
+
+            if ( !backgroundScroll1.hasClass('"horizontal_scroll'))
+                backgroundScroll1.addClass("horizontal_scroll");
+
+            if (!backgroundScroll2.hasClass('"horizontal_scrollFast'))
+                backgroundScroll2.addClass("horizontal_scrollFast");
+
             $("#transitionBlack").fadeIn(2500, function(){
                  $("#gameContainer").show();
 
@@ -325,7 +334,7 @@ var game = null;
                     $("#audioMain")[0].volume = 0.3;
                     $("#audioMain")[0].play();
                 }
-                
+
             }, 1000);
 
 
@@ -847,6 +856,7 @@ var game = null;
             for (var i = 0; i < skills.length; i++) {
                 skills[i].locked = true;
             }
+            skillCount = 0;
 
             // removing remainging elements from DOM
             $("#spaceshipContainer").remove();

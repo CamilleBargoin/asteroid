@@ -3,14 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
     <link rel="stylesheet" href="asteroid.css">
-
     <script></script>
+    <title>Basteroid - Camille Bargoin</title>
 </head>
 <body>
+
     <audio id="audioMain" loop>
-        <source src="./sound/02 HHavok-main - eric skiff.mp3" type="audio/mp3" >
+        <!--source src="./sound/02 HHavok-main - eric skiff.mp3" type="audio/mp3" -->
+        <source src="./sound/mainTheme.mp3" type="audio/mp3">
     </audio>
     <div>
         <div id="mainContainer">
@@ -88,11 +89,15 @@
                                 <img src="./img/icons/icon_skill.png" alt="">
                                 <p>Menu Principal</p>
                             </li>
+                            <li>
+                                <img src="./img/icons/icon_skill.png" alt="">
+                                <p>Musique: OUI</p>
+                            </li>
                         </ul>
                     </div>
                     <div id="endGameContainer">
 
-                        <span>
+                        <div>
                             <form id="saveScoreForm" action="score.php"  method="post">
                                 <h2>GAME OVER</h2>
                                 <p>SCORE:</p>
@@ -101,7 +106,7 @@
                                 <input type="hidden" name="callFunction" value="saveScore"/>
                                 <input id="submitNameButton" type="submit" value="VALIDER"/>
                             </form>
-                        </span>
+                        </div>
                     </div>
                     <div id="hud_messageContainer">
                         <div id="hud_messageBackground">
@@ -277,14 +282,12 @@
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="./jqueryUI/jquery-ui.min.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="circle-progress.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="typed-js/typed.js"></script>
-    <script src="Utils.js" type="text/javascript" charset="utf-8" defer></script>
-    <script src="Spaceship.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="Asteroid.js" type="text/javascript" charset="utf-8" async defer></script>
-    <script src="Bonus.js" type="text/javascript" charset="utf-8" async defer></script>
-    <!--script src="Boss.js" type="text/javascript" charset="utf-8" async defer></script-->
-    <script src="Game.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="./js/circle-progress.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="./js/typed-js/typed.js"></script>
+    <script src="./js/Utils.js" type="text/javascript" charset="utf-8" defer></script>
+    <script src="./js/Spaceship.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="./js/Asteroid.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="./js/Bonus.js" type="text/javascript" charset="utf-8" async defer></script>
+    <script src="./js/Game.js" type="text/javascript" charset="utf-8" async defer></script>
 </body>
 </html>

@@ -74,7 +74,7 @@ body>div {
 
 #backgroundScroll {
 
-	background: url("./img/other/backgroundSuperLarge.jpg") repeat-y;
+	background: url("./img/backgrounds/backgroundSuperLarge.jpg") repeat-y;
 	position: absolute;
     top: 0;
     left: 0;
@@ -96,7 +96,7 @@ body>div {
 }
 
 #backgroundScroll2 {
-	background: url("./img/other/backgroundSuperLargeTransparent.png") repeat-y;
+	background: url("./img/backgrounds/backgroundSuperLargeTransparent.png") repeat-y;
 	position: absolute;
     top: 0;
     left: 0;
@@ -638,7 +638,7 @@ body>div {
 
 
 .explosion {
-	background: url("explosion.png");
+	background: url("./img/explosion.png");
 	background-position: 0 0;
 	width: 100px;
 	height: 107px;
@@ -695,7 +695,7 @@ body>div {
     bottom: 0;
     left: 0;
     width: 40%;
-    height: 300px;
+    height: 445px;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 25px;
     border: 3px solid #00fdfa;
@@ -741,7 +741,7 @@ body>div {
     display: none;
 }
 
-#endGameContainer > span {
+#endGameContainer > div {
     position: absolute;
     margin: auto;
     top: 0;

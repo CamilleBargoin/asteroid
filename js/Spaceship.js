@@ -215,7 +215,7 @@ var Spaceship = function() {
             this.isFiring = true;
             var that = this;
 
-            this.intervalFireID = setInterval(function() {
+            this.fire = function() {
 
                 if(!game.mute) {
                     $("<audio></audio>")
@@ -223,13 +223,18 @@ var Spaceship = function() {
                         .prop("volume", 0.2)
                         .trigger("play");
                 }
-                
 
                 for(var i = 0; i < that.weapons.miniguns.length; i++) {
                     that.weapons.miniguns[i].fire();
                 }
 
-            }, 200);
+                 that.intervalFireID = setTimeout(function() {
+                    that.fire();
+                 }, 200);
+
+            };
+
+            this.fire();
         }
         else {
             if (this.minigunsJammed && !game.mute) {
@@ -408,7 +413,7 @@ var Laser = function() {
                     .prop("volume", 0.6)
                     .trigger("play");
             }
-           
+
 
 
             // animates the HUD to create a wobbling effect
